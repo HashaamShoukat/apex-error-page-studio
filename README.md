@@ -6,6 +6,8 @@ Friendly, good-looking error pages for Oracle APEX - **one page template for APE
 
 ![Error Page Studio preview](docs/images/preview.gif)
 
+**[Live demo](https://oracleapex.com/ords/r/hashaam-admin/error-page-studio/home)** - browse the gallery, try every option in the Designer and trigger a real APEX error (no sign-in needed).
+
 Error Page Studio is a small APEX application: a **Gallery** of ready-made looks, a **Designer** that previews every option live on phone, tablet and desktop and hands you the options and the page text, demo pages for every error, and the **Modern Error** page template itself, which you copy into your own application.
 
 ## Designs
