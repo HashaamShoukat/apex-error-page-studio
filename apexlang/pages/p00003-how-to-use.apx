@@ -1,0 +1,128 @@
+page 3 (
+    name: How to Use
+    alias: HOW-TO-USE
+    title: Error Page Studio - How to Use
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    css {
+        inline:
+            ```css
+            .es-Doc { max-width: 60rem; line-height: 1.7; }
+            .es-Doc h3 { margin: 1.75rem 0 .5rem; font-size: 1.125rem; }
+            .es-Doc h3:first-child { margin-top: 0; }
+            .es-Doc ol, .es-Doc ul { padding-inline-start: 1.25rem; margin: .25rem 0 .75rem; }
+            .es-Doc li { margin: .2rem 0; }
+            .es-Doc pre { margin: .5rem 0 1rem; padding: .875rem 1rem; overflow-x: auto; border-radius: 8px; background: #1f2329; color: #e6edf3; font-size: .8125rem; line-height: 1.55; }
+            .es-Doc p code, .es-Doc li code, .es-Doc td code { padding: .05rem .35rem; border-radius: 4px; background: rgba(127,127,127,.14); font-size: .8125rem; }
+            .es-Doc table { width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; font-size: .875rem; }
+            .es-Doc th, .es-Doc td { padding: .45rem .6rem; border-bottom: 1px solid var(--ut-component-border-color, #e4e7ec); text-align: left; vertical-align: top; }
+            .es-Doc th { font-weight: 700; opacity: .75; }
+            .es-Doc td:first-child { font-weight: 600; white-space: nowrap; }
+            ```
+    }
+    security {
+        authentication: public
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: How to Use
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region guide (
+        name: Use Error Page Studio in Your Own App
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <div class="es-Doc">
+                <h3>1. Get Error Page Studio into your workspace</h3>
+                <ol>
+                  <li>Download <code>error-page-studio.sql</code> from <a href="https://github.com/HashaamShoukat/apex-error-page-studio" target="_blank" rel="noopener">GitHub</a>.</li>
+                  <li><strong>App Builder &gt; Import</strong>, install it with any application ID. No database objects; APEX 26.1 or later.</li>
+                </ol>
+
+                <h3>2. Copy the template into your application</h3>
+                <p>In <em>your</em> application: <strong>Shared Components &gt; Templates &gt; Create &gt; Page &gt; As a Copy of an Existing Template</strong>, copy from <strong>Error Page Studio</strong> and pick <strong>Modern Error</strong> (tick <em>Subscribe</em> for later updates).</p>
+
+                <h3>3. APEX's own error page</h3>
+                <p>When a page fails - an unhandled error in a process, an authorization failure, a broken query - APEX shows its error page using the theme's <em>Error Page</em> template:</p>
+                <ol>
+                  <li><strong>Shared Components &gt; Themes &gt;</strong> your theme <strong>&gt; Component Defaults &gt; Error Page</strong> = <strong>Modern Error</strong>.</li>
+                  <li><strong>Shared Components &gt; Templates &gt; Modern Error &gt; Default Template Options</strong>: pick the look (use the Designer with Page = <em>APEX Error Page</em>). The error page always uses these defaults, whatever page failed.</li>
+                </ol>
+                <p>The page shows APEX's message, the extra information, a <em>Back</em> button, a link back to the home page and, with the option on, <em>Copy details</em> for support tickets. Make the messages friendly with an error handling function (Application Definition &gt; Error Handling), for example:</p>
+                <pre>function friendly_error ( p_error in apex_error.t_error ) return apex_error.t_error_result is
+                    l_result apex_error.t_error_result := apex_error.init_error_result(p_error => p_error);
+                begin
+                    if p_error.is_internal_error then
+                        return l_result;                                  -- keep APEX's own wording
+                    end if;
+                    if p_error.ora_sqlcode between -20999 and -20000 then
+                        l_result.message := apex_error.get_first_ora_error_text(p_error => p_error);   -- your own raise_application_error text
+                    elsif l_result.display_location = apex_error.c_on_error_page then
+                        l_result.message := 'Something went wrong. Please try again in a moment.';
+                    end if;
+                    return l_result;
+                end friendly_error;</pre>
+
+                <h3>4. Your own error pages</h3>
+                <p>Create a public page with Page Template <strong>Modern Error</strong>, pick its Template Options and put the message in a Static Content region (template <em>Blank with Attributes</em>) in the <strong>Content Body</strong> slot. The Designer gives you both. Then point APEX at it:</p>
+                <table>
+                  <tr><th>Page</th><th>How users get there</th></tr>
+                  <tr><td>Session Expired</td><td>Shared Components &gt; Security Attributes &gt; Session Management: <strong>Session Timeout URL</strong> and <strong>Session Idle Timeout URL</strong> = <code>f?p=&amp;APP_ID.:SESSION-EXPIRED</code> (the page must be public).</td></tr>
+                  <tr><td>Not Found</td><td>Redirect to it when a record does not exist, e.g. a Before Header branch when the item's row is not found. (A page number that does not exist shows APEX's built-in "Sorry, this page isn't available" screen, which templates cannot change.)</td></tr>
+                  <tr><td>Access Denied</td><td>Authorization failures appear on APEX's error page (step 3); for a dedicated page, redirect to it from your own checks.</td></tr>
+                  <tr><td>Maintenance</td><td>Edit Application &gt; Availability: <strong>Unavailable (Redirect to URL)</strong> pointing to the maintenance page in another application (an unavailable application cannot show its own pages), or keep the page and switch it on with a build option.</td></tr>
+                  <tr><td>Server Error / Offline</td><td>Link or redirect to them from your own error handling; the Offline page reloads by itself when the connection comes back.</td></tr>
+                </table>
+
+                <h3>5. Helper classes</h3>
+                <table>
+                  <tr><th>Class</th><th>What it does</th></tr>
+                  <tr><td><code>me-Code</code></td><td>The code (404, 503, Offline) - a pill, or huge in Big Number, Neon, Glitch, Editorial, Soft UI and Space.</td></tr>
+                  <tr><td><code>me-Title</code>, <code>me-Text</code></td><td>The heading and the explanation.</td></tr>
+                  <tr><td><code>me-Actions</code>, <code>me-Btn</code>, <code>me-Btn--primary</code></td><td>A row of buttons (links or buttons).</td></tr>
+                  <tr><td><code>me-Back</code>, <code>me-Reload</code></td><td>A button that goes back, or reloads the page (Try again).</td></tr>
+                  <tr><td><code>me-Links</code></td><td>A list of helpful links under the buttons.</td></tr>
+                </table>
+                <p>Optional slots: <strong>Top Bar</strong> (logo), <strong>Page Footer</strong>, <strong>Background Image</strong> (an <code>&lt;img&gt;</code> for Background = Image). The text of the Copy button can be translated with the text message <code>MODERN_ERROR.COPY</code>.</p>
+                </div>
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

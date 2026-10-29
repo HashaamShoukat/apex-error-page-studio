@@ -1,0 +1,251 @@
+pageTemplate modern-error (
+    name: Modern Error
+    templateClass: login
+    templateOptions {
+        default: [
+            me-Anim--entrance
+            me-Anim--art
+            me-Fx--copy
+            me-Fx--online
+        ]
+    }
+    page {
+        header:
+            ```html
+            <!DOCTYPE html>
+            <html class="no-js #RTL_CLASS# page-&APP_PAGE_ID!ATTR. app-&APP_ALIAS!ATTR." lang="&BROWSER_LANGUAGE!ATTR." #TEXT_DIRECTION#>
+            <head>
+              <meta charset="utf-8">
+              <title>#TITLE#</title>
+              #APEX_CSS#
+              #THEME_CSS#
+              #TEMPLATE_CSS#
+              __HEADER_STYLE__
+              #THEME_STYLE_CSS#
+              #APPLICATION_CSS#
+              #PAGE_CSS#
+              #FAVICONS#
+              #HEAD#
+              <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+            </head>
+            <body class="me-Page #PAGE_CSS_CLASSES#" #TEXT_DIRECTION# #ONLOAD#>
+            <script>
+            /* Modern Error: the Error Page Studio designer previews a look through the URL hash (#me=me-Design--neon ...) */
+            window.modernError = (function (body) {
+              var LOOK = /^me-(Design|Art|Accent|Scheme|Bg|Width|Anim|Fx)-/;
+              function applyPreview() {
+                var m = /[#&]me=([^&]*)/.exec(window.location.hash);
+                if (!m) { return; }
+                Array.prototype.slice.call(body.classList).forEach(function (c) { if (LOOK.test(c)) { body.classList.remove(c); } });
+                decodeURIComponent(m[1]).split(/[\s,]+/).forEach(function (c) { if (LOOK.test(c)) { body.classList.add(c); } });
+              }
+              try { applyPreview(); } catch (e) { /* never block an error page */ }
+              return { applyPreview: applyPreview };
+            })(document.body);
+            </script>
+            <noscript class="t-PageBody-noScript">&APP_TEXT$APEX_PAGE_NOSCRIPT.</noscript>
+            #FORM_OPEN#
+            <div class="me-Bg" aria-hidden="true"><div class="me-Bg-media">#BACKGROUND_IMAGE#</div></div>
+            ```
+        body:
+            ```html
+            <div class="me-Shell">
+              <div class="me-TopBar">#REGION_POSITION_02#</div>
+              <main class="me-Main" id="main">
+                <div class="me-Stage">
+                  <div class="me-Artbox" aria-hidden="true"><div class="me-Art"></div></div>
+                  <div class="me-Content">#SUCCESS_MESSAGE##NOTIFICATION_MESSAGE##GLOBAL_NOTIFICATION##BODY#</div>
+                </div>
+              </main>
+              <div class="me-Footer">#REGION_POSITION_04#</div>
+            </div>
+            ```
+        footer:
+            ```html
+            #FORM_CLOSE#
+            #DEVELOPER_TOOLBAR#
+            #APEX_JAVASCRIPT#
+            #GENERATED_CSS#
+            #THEME_JAVASCRIPT#
+            #TEMPLATE_JAVASCRIPT#
+            #APPLICATION_JAVASCRIPT#
+            #PAGE_JAVASCRIPT#
+            #GENERATED_JAVASCRIPT#
+            </body>
+            </html>
+            ```
+    }
+    javaScript {
+        executeWhenPageLoads:
+            ```javascript-browser
+            // Modern Error behaviour, switched by template options; texts from text messages MODERN_ERROR.* when defined
+            (function ($, me) {
+                var body = document.body;
+                function has(c) { return body.classList.contains(c); }
+                function msg(key, fallback) {
+                    var t = apex.lang.getMessage(key);
+                    return (!t || t === key) ? fallback : t;
+                }
+
+                // designer preview: follow hash changes without a reload
+                window.addEventListener("hashchange", function () { me.applyPreview(); });
+
+                // Back: the previous page, or the home page when there is none
+                $(document).on("click", ".me-Back", function (e) {
+                    e.preventDefault();
+                    if (window.history.length > 1) { window.history.back(); } else { window.location.href = $(".me-Home").attr("href") || "./"; }
+                });
+
+                // Try Again
+                $(document).on("click", ".me-Reload", function (e) { e.preventDefault(); window.location.reload(); });
+
+                // Copy Error Details (APEX error page): message, details, page and time - ready for a support ticket
+                var err = $(".me-Error");
+                if (err.length && has("me-Fx--copy") && navigator.clipboard) {
+                    $('<button type="button" class="me-Btn me-Copy"></button>')
+                        .text(msg("MODERN_ERROR.COPY", "Copy details"))
+                        .appendTo(err.find(".me-Actions"))
+                        .on("click", function () {
+                            var b = this,
+                                text = [err.find(".me-Title").text(), err.find(".me-Text").text(), err.find(".me-Tech").text(),
+                                        "Page: " + window.location.href.split("#")[0], "Time: " + new Date().toISOString()]
+                                       .map(function (s) { return $.trim(s); }).filter(Boolean).join("\n");
+                            navigator.clipboard.writeText(text).then(function () {
+                                b.classList.add("me-Copied");
+                                setTimeout(function () { b.classList.remove("me-Copied"); }, 2000);
+                            });
+                        });
+                }
+
+                // Reload When Back Online: an offline page comes back by itself
+                if (has("me-Fx--online")) {
+                    window.addEventListener("online", function () { window.location.reload(); });
+                }
+            })(apex.jQuery, window.modernError);
+            ```
+    }
+    css {
+        inline:
+            ```css
+            __CSS__
+            ```
+    }
+    subtemplate {
+        successMessage:
+            ```html
+            <div class="t-Body-alert">
+              <div class="t-Alert t-Alert--defaultIcons t-Alert--success t-Alert--horizontal t-Alert--page t-Alert--colorBG" id="t_Alert_Success" role="region" aria-labelledby="page_success_id">
+                <div class="t-Alert-wrap">
+                  <div class="t-Alert-icon">
+                    <span class="t-Icon" role="img" aria-label="&"APP_TEXT$APEX.SUCCESS"!ATTR."></span>
+                  </div>
+                  <div class="t-Alert-content">
+                    <div class="t-Alert-header">
+                      <h2 id="page_success_id" class="u-vh">#SUCCESS_MESSAGE_HEADING#</h2>
+                    </div>
+                    <div class="t-Alert-title" role="alert">#SUCCESS_MESSAGE#</div>
+                  </div>
+                  <div class="t-Alert-buttons">
+                    <button class="t-Button t-Button--noUI t-Button--icon t-Button--closeAlert" type="button" aria-label="#CLOSE_NOTIFICATION#" title="#CLOSE_NOTIFICATION#"><span class="t-Icon icon-close"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ```
+        notification:
+            ```html
+            <div class="t-Body-alert">
+              <div class="t-Alert t-Alert--defaultIcons t-Alert--warning t-Alert--horizontal t-Alert--page t-Alert--colorBG" id="t_Alert_Notification" role="region" aria-labelledby="page_warning_id">
+                <div class="t-Alert-wrap">
+                  <div class="t-Alert-icon">
+                    <span class="t-Icon" role="img" aria-label="&"APP_TEXT$WARNING"!ATTR."></span>
+                  </div>
+                  <div class="t-Alert-content">
+                    <div class="t-Alert-header">
+                      <h2 id="page_warning_id" class="u-vh">#ERROR_MESSAGE_HEADING#</h2>
+                    </div>
+                    <div class="t-Alert-body" role="alert">#MESSAGE#</div>
+                  </div>
+                  <div class="t-Alert-buttons">
+                    <button class="t-Button t-Button--noUI t-Button--icon t-Button--closeAlert" type="button" aria-label="#CLOSE_NOTIFICATION#" title="#CLOSE_NOTIFICATION#"><span class="t-Icon icon-close"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ```
+    }
+    layout {
+        maxColumns: 12
+        alwaysUseMaxColumns: true
+        defaultLabelColumnSpan: 2
+        firstColumnAttributes: col-start
+        lastColumnAttributes: col-end
+        containerTemplate:
+            ```html
+            <div class="container">
+            #ROWS#
+            </div>
+            ```
+        rowTemplate:
+            ```html
+            <div class="row #CSS_CLASSES#">
+            #COLUMNS#
+            </div>
+            ```
+        columnTemplate: <div class="col col-#COLUMN_SPAN_NUMBER# #CSS_CLASSES# #FIRST_LAST_COLUMN_ATTRIBUTES#" #ATTRIBUTES#>#CONTENT#</div>
+    }
+    errorPage {
+        template:
+            ```html
+            <div class="me-Error">
+              <p class="me-Code">Oops</p>
+              <h1 class="me-Title">#MESSAGE#</h1>
+              <p class="me-Text">#ADDITIONAL_INFO#</p>
+              <pre class="me-Tech">#TECHNICAL_INFO#</pre>
+              <div class="me-Actions"><button type="button" class="me-Btn me-Btn--primary me-Back">#OK#</button></div>
+              <a class="me-Home" href="&HOME_LINK.">#RETURN_TO_APPLICATION#</a>
+            </div>
+            ```
+    }
+    comments {
+        comments: Modern Error (Error Page Studio) - for APEX's own error page (set it as the theme's Error Page template; its Default Template Options choose the look) and for your own public error pages (404, access denied, session expired, maintenance, offline). Looks are template options - Design, Illustration, Accent Color, Color Scheme, Background. Slots - Content Body (your message; helper classes me-Code, me-Title, me-Text, me-Actions, me-Btn, me-Btn--primary, me-Back (go back), me-Reload (try again), me-Links), Top Bar (logo), Page Footer, Background Image. Optional text message MODERN_ERROR.COPY.
+    }
+__OPTIONS__
+    slot backgroundImage (
+        name: Background Image
+        staticId: BACKGROUND_IMAGE
+        gridLayout {
+            gridSupport: false
+            newRow: false
+        }
+    )
+
+    slot contentBody (
+        name: Content Body
+        staticId: BODY
+        supports {
+            items: true
+            buttons: true
+        }
+        gridLayout {
+            maxFixedColumns: 12
+        }
+    )
+
+    slot pageFooter (
+        name: Page Footer
+        staticId: REGION_POSITION_04
+        gridLayout {
+            gridSupport: false
+        }
+    )
+
+    slot topBar (
+        name: Top Bar
+        staticId: REGION_POSITION_02
+        gridLayout {
+            gridSupport: false
+        }
+    )
+
+)

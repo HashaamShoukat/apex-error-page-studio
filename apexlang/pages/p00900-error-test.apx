@@ -1,0 +1,99 @@
+page 900 (
+    name: Try a Real Error
+    alias: ERROR-TEST
+    title: Try a Real Error
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: Try a Real Error
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 5
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region about (
+        name: APEX's Own Error Page
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p>When something fails on a page (an unhandled error in a process, an authorization failure, a broken query) APEX shows its error page. In this app that page uses the <strong>Modern Error</strong> template - the theme's Error Page template - with the template's <strong>Default Template Options</strong>.</p>
+                <p>The button below runs a process that raises <code>ORA-20001</code>, so you can see it for real.</p>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    button trigger (
+        buttonName: TRIGGER
+        label: Trigger an Error
+        layout {
+            sequence: 10
+            region: @about
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text-with-icon
+            hot: true
+            templateOptions: [
+                #DEFAULT#
+                t-Button--iconLeft
+            ]
+            icon: fa-bug
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 900
+                request: BOOM
+            }
+        }
+    )
+
+    process raise-error (
+        name: Raise Error
+        type: executeCode
+        source {
+            plsqlCode: if :REQUEST = 'BOOM' then raise_application_error(-20001, 'The order could not be saved because the warehouse service did not answer.'); end if;
+        }
+        execution {
+            sequence: 10
+            point: beforeHeader
+        }
+    )
+
+)

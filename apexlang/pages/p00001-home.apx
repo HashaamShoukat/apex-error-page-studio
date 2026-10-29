@@ -1,0 +1,157 @@
+page 1 (
+    name: Gallery
+    alias: HOME
+    title: Error Page Studio - Gallery
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    javaScript {
+        functionAndGlobalVariableDeclaration:
+            ```javascript-browser
+            // Ready-made looks of the Modern Error template; thumbnails are app files gallery/<id>.jpg (made from the real pages).
+            var ES_PRESETS = [{"id":"bignum-404","name":"Big Number","type":"not-found","tags":"notfound light","cls":"me-Design--bignum me-Art--notfound me-Accent--indigo"},
+                {"id":"classic-404","name":"Classic","type":"not-found","tags":"notfound light","cls":"me-Art--notfound me-Accent--violet"},
+                {"id":"split-403","name":"Split Panel","type":"access-denied","tags":"denied light","cls":"me-Design--split me-Art--denied me-Accent--wine"},
+                {"id":"neon-404","name":"Neon","type":"not-found","tags":"notfound dark","cls":"me-Design--neon me-Art--notfound"},
+                {"id":"glitch-500","name":"Glitch","type":"server-error","tags":"server dark","cls":"me-Design--glitch me-Art--server"},
+                {"id":"terminal-500","name":"Terminal","type":"server-error","tags":"server dark","cls":"me-Design--terminal me-Art--server"},
+                {"id":"editorial-401","name":"Editorial","type":"session-expired","tags":"expired light","cls":"me-Design--editorial me-Art--expired"},
+                {"id":"soft-404","name":"Soft UI","type":"not-found","tags":"notfound light","cls":"me-Design--soft me-Art--notfound"},
+                {"id":"bold-404","name":"Bold","type":"not-found","tags":"notfound light","cls":"me-Design--bold me-Art--notfound"},
+                {"id":"space-offline","name":"Space","type":"offline","tags":"offline dark","cls":"me-Design--space me-Art--offline"},
+                {"id":"blueprint-503","name":"Blueprint","type":"maintenance","tags":"maintenance dark","cls":"me-Design--blueprint me-Art--maintenance"},
+                {"id":"wave-404","name":"Wave","type":"not-found","tags":"notfound light","cls":"me-Design--wave me-Art--notfound me-Accent--ocean"},
+                {"id":"grid-401","name":"Session Expired - Dark","type":"session-expired","tags":"expired dark","cls":"me-Art--expired me-Scheme--dark me-Accent--cyan me-Bg--grid"},
+                {"id":"split-503","name":"Maintenance - Split","type":"maintenance","tags":"maintenance light","cls":"me-Design--split me-Art--maintenance me-Accent--tangerine"},
+                {"id":"bignum-403","name":"Access Denied - Big Number","type":"access-denied","tags":"denied light","cls":"me-Design--bignum me-Art--denied me-Accent--rose me-Bg--dots"},
+                {"id":"neon-503","name":"Maintenance - Neon","type":"maintenance","tags":"maintenance dark","cls":"me-Design--neon me-Art--maintenance me-Accent--rose"},
+                {"id":"soft-offline","name":"Offline - Soft UI Dark","type":"offline","tags":"offline dark","cls":"me-Design--soft me-Scheme--dark me-Art--offline me-Accent--cyan"},
+                {"id":"bold-500","name":"Server Error - Bold","type":"server-error","tags":"server light","cls":"me-Design--bold me-Art--server"},
+                {"id":"wave-401","name":"Session Expired - Wave","type":"session-expired","tags":"expired light","cls":"me-Design--wave me-Art--expired me-Accent--emerald"},
+                {"id":"mesh-404","name":"Mesh","type":"not-found","tags":"notfound light","cls":"me-Art--notfound me-Bg--mesh me-Accent--violet"},
+                {"id":"apex-classic","name":"APEX Error - Classic","type":"apex","tags":"apex light","cls":"me-Accent--indigo"},
+                {"id":"apex-bignum","name":"APEX Error - Big Number","type":"apex","tags":"apex light","cls":"me-Design--bignum me-Accent--violet"},
+                {"id":"apex-split","name":"APEX Error - Split Panel","type":"apex","tags":"apex light","cls":"me-Design--split me-Accent--ocean"},
+                {"id":"apex-terminal","name":"APEX Error - Terminal","type":"apex","tags":"apex dark","cls":"me-Design--terminal"},
+                {"id":"apex-space","name":"APEX Error - Space","type":"apex","tags":"apex dark","cls":"me-Design--space"},
+                {"id":"apex-editorial","name":"APEX Error - Editorial","type":"apex","tags":"apex light","cls":"me-Design--editorial"}];
+            var ES_DEFAULTS = "me-Anim--entrance me-Anim--art me-Fx--copy me-Fx--online";
+            var ES_TYPE_NAMES = { "not-found": "Not Found", "access-denied": "Access Denied", "session-expired": "Session Expired", maintenance: "Maintenance", "server-error": "Server Error", offline: "Offline", apex: "APEX Error Page" };
+            ```
+        executeWhenPageLoads:
+            ```javascript-browser
+            (function ($) {
+                var box = document.getElementById("es-gallery"), files = box.getAttribute("data-files"),
+                    app = box.getAttribute("data-app"), session = box.getAttribute("data-session"), designer = box.getAttribute("data-designer");
+                function esc(s) { return apex.util.escapeHTML(String(s)); }
+                function pageUrl(p) { return p.type === "apex" ? "f?p=" + app + ":ERROR-TEST:" + session + ":BOOM" : "f?p=" + app + ":" + p.type.toUpperCase() + ":" + session; }
+                function hash(p) { return "#me=" + encodeURIComponent((ES_DEFAULTS + " " + p.cls).trim()) + "&type=" + p.type; }
+                box.innerHTML = ES_PRESETS.map(function (p) {
+                    return '<article class="es-Card" data-tags="' + esc(p.tags) + '">' +
+                        '<a class="es-Card-shot" href="' + esc(designer + hash(p)) + '" aria-label="' + esc("Customize " + p.name) + '"><img src="' + esc(files + "gallery/" + p.id + ".jpg") + '" alt="" loading="lazy" width="640" height="400"></a>' +
+                        '<div class="es-Card-body"><h3 class="es-Card-title">' + esc(p.name) + '</h3><span class="es-Card-type">' + esc(ES_TYPE_NAMES[p.type]) + '</span>' +
+                        '<div class="es-Card-actions"><a class="t-Button t-Button--small t-Button--hot" href="' + esc(designer + hash(p)) + '"><span class="t-Button-label">Customize</span></a>' +
+                        '<a class="t-Button t-Button--small" target="_blank" rel="noopener" href="' + esc(pageUrl(p) + hash(p)) + '"><span class="t-Button-label">Full Screen</span></a></div></div></article>';
+                }).join("");
+                $(document).on("click", ".es-Filter button", function () {
+                    var f = this.getAttribute("data-f");
+                    $(".es-Filter button").attr("aria-pressed", "false");
+                    this.setAttribute("aria-pressed", "true");
+                    $(".es-Card").each(function () { this.hidden = !!f && (" " + this.getAttribute("data-tags") + " ").indexOf(" " + f + " ") < 0; });
+                });
+            })(apex.jQuery);
+            ```
+    }
+    css {
+        inline:
+            ```css
+            .es-Hero { padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem); border-radius: 18px; color: #ffffff;
+                       background: radial-gradient(circle at 88% 20%, rgba(255,255,255,.16), transparent 40%), linear-gradient(120deg, #0f172a, #1e3a8a 50%, #0e7490); }
+            .es-Hero h1 { margin: 0 0 .5rem; font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+            .es-Hero p { max-width: 48rem; margin: 0 0 1.25rem; font-size: 1.0625rem; line-height: 1.6; opacity: .92; }
+            .es-Hero .t-Button { margin: 0 .5rem .5rem 0; }
+            .es-Hero .t-Button--hot { --a-button-background-color: #ffffff; --a-button-text-color: #1e3a8a; --a-button-hover-background-color: #e0f2fe; --a-button-hover-text-color: #1e3a8a; }
+            .es-Hero .es-Ghost { --a-button-background-color: transparent; --a-button-text-color: #ffffff; --a-button-hover-background-color: rgba(255,255,255,.14); --a-button-hover-text-color: #ffffff; border: 1px solid rgba(255,255,255,.6); }
+            .es-Filter { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 1rem; }
+            .es-Filter button { padding: .375rem .95rem; border-radius: 999px; border: 1px solid var(--ut-component-border-color, #d0d5dd); background: var(--ut-component-background-color, #fff); color: inherit; font: inherit; font-size: .875rem; cursor: pointer; }
+            .es-Filter button[aria-pressed="true"] { background: #1e3a8a; border-color: #1e3a8a; color: #ffffff; }
+            .es-Grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1.25rem; }
+            .es-Card { display: flex; flex-direction: column; overflow: hidden; border-radius: 14px; border: 1px solid var(--ut-component-border-color, #e4e7ec); background: var(--ut-component-background-color, #fff);
+                       box-shadow: 0 1px 2px rgba(16,24,40,.05); transition: box-shadow .2s ease, transform .2s ease; }
+            .es-Card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -18px rgba(16,24,40,.35); }
+            .es-Card[hidden] { display: none; }
+            .es-Card-shot { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: #eef0f4; }
+            .es-Card-shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+            .es-Card:hover .es-Card-shot img { transform: scale(1.03); }
+            .es-Card-body { display: flex; flex-direction: column; gap: .5rem; padding: .875rem 1rem 1rem; }
+            .es-Card-title { margin: 0; font-size: 1rem; font-weight: 700; }
+            .es-Card-type { align-self: flex-start; padding: .1rem .55rem; border-radius: 999px; background: rgba(30,58,138,.1); color: #1e3a8a; font-size: .75rem; font-weight: 600; }
+            .es-Card-actions { display: flex; gap: .5rem; margin-top: .25rem; }
+            .es-Card-actions .t-Button { flex: 1; justify-content: center; }
+            ```
+    }
+    security {
+        authentication: public
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region hero (
+        name: Error Page Studio
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <div class="es-Hero">
+                  <h1>Error pages for Oracle APEX</h1>
+                  <p>One page template for APEX's own error page and for your 404, access denied, session expired, maintenance and offline pages - 12 designs, line illustrations, light and dark. Every look is a template option. Pick one, fine-tune it in the Designer, copy the template into your app.</p>
+                  <a class="t-Button t-Button--hot" href="f?p=&APP_ID.:DESIGNER:&APP_SESSION."><span class="t-Button-label">Open the Designer</span></a>
+                  <a class="t-Button es-Ghost" href="f?p=&APP_ID.:HOW-TO-USE:&APP_SESSION."><span class="t-Button-label">How to use it</span></a>
+                </div>
+                <div class="es-Filter" role="group" aria-label="Filter">
+                  <button type="button" data-f="" aria-pressed="true">All</button>
+                  <button type="button" data-f="apex" aria-pressed="false">APEX error page</button>
+                  <button type="button" data-f="notfound" aria-pressed="false">Not found</button>
+                  <button type="button" data-f="denied" aria-pressed="false">Access denied</button>
+                  <button type="button" data-f="expired" aria-pressed="false">Session expired</button>
+                  <button type="button" data-f="maintenance" aria-pressed="false">Maintenance</button>
+                  <button type="button" data-f="server" aria-pressed="false">Server error</button>
+                  <button type="button" data-f="offline" aria-pressed="false">Offline</button>
+                  <button type="button" data-f="dark" aria-pressed="false">Dark</button>
+                </div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region gallery (
+        name: Gallery
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <div class="es-Grid" id="es-gallery" data-files="#APP_FILES#" data-app="&APP_ID." data-session="&APP_SESSION." data-designer="f?p=&APP_ID.:DESIGNER:&APP_SESSION."></div>
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

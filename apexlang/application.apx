@@ -1,0 +1,59 @@
+app ERROR-PAGE-STUDIO (
+    name: Error Page Studio
+    logo {
+        type: text
+        text: Error Page Studio
+    }
+    navigation {
+        homeUrl: {
+            page: 1
+        }
+    }
+    navigationMenu {
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            js-defaultCollapsed
+            js-navCollapsed--hidden
+            t-TreeNav--styleA
+        ]
+        list: @navigation-menu
+    }
+    navigationBar {
+        list: @navigation-bar
+        listTemplate: @/navigation-bar
+        templateOptions: #DEFAULT#
+    }
+    userInterface {
+        currentTheme: @universal-theme
+        globalPage: 0
+        addBuiltWithApexToFooter: false
+        autoDismissSuccessMessages: true
+    }
+    appFormatMasks {
+        date: DD-MON-YYYY
+        timestamp: DS
+        timestampTimeZone: DS
+    }
+    authentication {
+        scheme: @no-authentication
+    }
+    security {
+        deepLinking: true
+        embedInFrames: allowSameOrigin
+    }
+    sessionStateProtection {
+        checksumSalt: 9A3E5C7B1D2F4068A9C1E3B5D7F92A4C6E8B0D2F4A6C8E0B2D4F6A8C0E2B4D6F
+    }
+    sessionManagement {
+        maxSessionLength: 28800
+        maxSessionIdleTime: 7200
+    }
+
+    substitution APP_NAME (
+        value {
+            staticValue: Error Page Studio
+        }
+    )
+
+)

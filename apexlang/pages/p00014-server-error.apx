@@ -1,0 +1,44 @@
+page 14 (
+    name: Server Error
+    alias: SERVER-ERROR
+    title: Server Error
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--glitch
+            me-Art--server
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">500</p>
+                <h1 class="me-Title">Something went wrong</h1>
+                <p class="me-Text">An unexpected error happened on our side. It has been logged and we're looking into it. Please try again in a moment.</p>
+                <div class="me-Actions"><button type="button" class="me-Btn me-Btn--primary me-Reload">Try again</button><a class="me-Btn" href="f?p=&APP_ID.:1:&APP_SESSION.">Go to the home page</a></div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

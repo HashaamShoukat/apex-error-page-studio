@@ -1,0 +1,561 @@
+page 2 (
+    name: Designer
+    alias: DESIGNER
+    title: Error Page Studio - Designer
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    javaScript {
+        executeWhenPageLoads:
+            ```javascript-browser
+            // Designer: every choice is a Modern Error template option (a body class). The preview iframe shows the real page;
+            // the classes travel in its URL hash (#me=...). APEX's own error page is page 900 with request BOOM.
+            (function ($) {
+                var SNIPPETS = {"not-found":"<p class=\"me-Code\">404</p>\n<h1 class=\"me-Title\">Page not found</h1>\n<p class=\"me-Text\">The page you are looking for doesn't exist or has moved. Check the address, or start again from the home page.</p>\n<div class=\"me-Actions\"><a class=\"me-Btn me-Btn--primary\" href=\"f?p=&APP_ID.:1:&APP_SESSION.\">Go to the home page</a><button type=\"button\" class=\"me-Btn me-Back\">Go back</button></div>\n<ul class=\"me-Links\"><li><a href=\"f?p=&APP_ID.:3:&APP_SESSION.\">Help</a></li><li><a href=\"mailto:support@example.com\">Contact support</a></li></ul>","access-denied":"<p class=\"me-Code\">403</p>\n<h1 class=\"me-Title\">Access denied</h1>\n<p class=\"me-Text\">You don't have permission to see this page. If you think you should, ask your administrator for access.</p>\n<div class=\"me-Actions\"><a class=\"me-Btn me-Btn--primary\" href=\"f?p=&APP_ID.:1:&APP_SESSION.\">Go to the home page</a><a class=\"me-Btn\" href=\"mailto:support@example.com?subject=Access%20request\">Request access</a></div>","session-expired":"<p class=\"me-Code\">401</p>\n<h1 class=\"me-Title\">Your session has expired</h1>\n<p class=\"me-Text\">For your security you were signed out after a while without activity. Sign in again to carry on where you left off.</p>\n<div class=\"me-Actions\"><a class=\"me-Btn me-Btn--primary\" href=\"f?p=&APP_ID.:1:&APP_SESSION.\">Sign in again</a></div>","maintenance":"<p class=\"me-Code\">503</p>\n<h1 class=\"me-Title\">We'll be back soon</h1>\n<p class=\"me-Text\">We're making some improvements. The application will be available again shortly - thank you for your patience.</p>\n<div class=\"me-Actions\"><button type=\"button\" class=\"me-Btn me-Btn--primary me-Reload\">Try again</button></div>","server-error":"<p class=\"me-Code\">500</p>\n<h1 class=\"me-Title\">Something went wrong</h1>\n<p class=\"me-Text\">An unexpected error happened on our side. It has been logged and we're looking into it. Please try again in a moment.</p>\n<div class=\"me-Actions\"><button type=\"button\" class=\"me-Btn me-Btn--primary me-Reload\">Try again</button><a class=\"me-Btn\" href=\"f?p=&APP_ID.:1:&APP_SESSION.\">Go to the home page</a></div>","offline":"<p class=\"me-Code\">Offline</p>\n<h1 class=\"me-Title\">You're offline</h1>\n<p class=\"me-Text\">Check your internet connection. This page reloads by itself as soon as you're back online.</p>\n<div class=\"me-Actions\"><button type=\"button\" class=\"me-Btn me-Btn--primary me-Reload\">Try again</button></div>"};
+                var TYPE_ART = {"not-found":"me-Art--notfound","access-denied":"me-Art--denied","session-expired":"me-Art--expired","maintenance":"me-Art--maintenance","server-error":"me-Art--server","offline":"me-Art--offline"};
+                var SELECTS = [
+                    { item: "P2_DESIGN", group: "Design" }, { item: "P2_ART", group: "Illustration" }, { item: "P2_ACCENT", group: "Accent Color" },
+                    { item: "P2_SCHEME", group: "Color Scheme" }, { item: "P2_BACKGROUND", group: "Background" }, { item: "P2_WIDTH", group: "Width" }
+                ];
+                var SWITCHES = [
+                    { item: "P2_ANIM_ENTRANCE", css: "me-Anim--entrance", label: "Entrance Animation", isDefault: true },
+                    { item: "P2_ANIM_ART", css: "me-Anim--art", label: "Animated Illustration", isDefault: true },
+                    { item: "P2_COPY", css: "me-Fx--copy", label: "Copy Error Details Button", isDefault: true },
+                    { item: "P2_ONLINE", css: "me-Fx--online", label: "Reload When Back Online", isDefault: true }
+                ];
+                var frame = document.getElementById("esd-frame"), app = frame.getAttribute("data-app"), session = frame.getAttribute("data-session");
+                function esc(s) { return apex.util.escapeHTML(String(s)); }
+                function pageUrl(type) { return type === "apex" ? "f?p=" + app + ":ERROR-TEST:" + session + ":BOOM" : "f?p=" + app + ":" + type.toUpperCase() + ":" + session; }
+
+                // a look passed from the Gallery: #me=<classes>&type=<page>
+                (function fromHash() {
+                    var m = /[#&]me=([^&]*)/.exec(location.hash), t = /[#&]type=([\w-]+)/.exec(location.hash);
+                    if (t && $("#P2_TYPE option[value='" + t[1] + "']").length) { apex.item("P2_TYPE").setValue(t[1], null, true); }
+                    if (!m) { return; }
+                    var cls = decodeURIComponent(m[1]).split(/\s+/);
+                    SELECTS.forEach(function (s) {
+                        var hit = $("#" + s.item + " option").filter(function () { return this.value && cls.indexOf(this.value) >= 0; }).first();
+                        apex.item(s.item).setValue(hit.length ? hit.val() : "", null, true);
+                    });
+                    SWITCHES.forEach(function (s) { apex.item(s.item).setValue(cls.indexOf(s.css) >= 0 ? "Y" : "N", null, true); });
+                })();
+
+                function chosen() {
+                    var type = $v("P2_TYPE"), cls = [], extra = [], rows = [], allDefaults = true;
+                    SELECTS.forEach(function (s) {
+                        var v = $v(s.item), text = $("#" + s.item + " option:selected").text();
+                        if (s.item === "P2_ART" && !v && type !== "apex") { v = TYPE_ART[type]; text = $("#P2_ART option[value='" + v + "']").text() + " (matches the page)"; }
+                        if (v) { cls.push(v); extra.push(v); }
+                        rows.push({ group: s.group, option: text, isDefault: !v });
+                    });
+                    SWITCHES.forEach(function (s) {
+                        var on = $v(s.item) === "Y";
+                        if (on) { cls.push(s.css); }
+                        if (s.isDefault && !on) { allDefaults = false; }
+                        if (on && !s.isDefault) { extra.push(s.css); }
+                        rows.push({ group: s.label, option: on ? "On" : "Off" });
+                    });
+                    return { type: type, cls: cls, rows: rows, list: allDefaults ? ["#DEFAULT#"].concat(extra) : cls, all: cls };
+                }
+
+                function render() {
+                    var c = chosen(), want = pageUrl(c.type), hash = "#me=" + encodeURIComponent(c.cls.join(" "));
+                    if ((frame.getAttribute("src") || "").split("#")[0] !== want) { frame.setAttribute("src", want + hash); }
+                    else { try { frame.contentWindow.location.hash = hash; } catch (e) { frame.setAttribute("src", want + hash); } }
+                    $("#esd-summary").html('<dl class="esd-List">' + c.rows.map(function (r) {
+                        return "<dt>" + esc(r.group) + "</dt><dd" + (r.isDefault ? ' class="is-default"' : "") + ">" + esc(r.option) + "</dd>";
+                    }).join("") + "</dl>");
+                    var apexPage = c.type === "apex";
+                    $("#esd-code").text(apexPage
+                        ? "-- Modern Error template > Default Template Options (Shared Components > Templates)\ntemplateOptions {\n    default: [\n" + c.all.map(function (x) { return "        " + x + "\n"; }).join("") + "    ]\n}"
+                        : "appearance {\n    pageTemplate: @modern-error\n    templateOptions: [\n" + c.list.map(function (x) { return "        " + x + "\n"; }).join("") + "    ]\n}");
+                    $("#esd-where").html(apexPage
+                        ? "APEX's own error page uses the template's <strong>Default Template Options</strong>: open Shared Components &gt; Templates &gt; Modern Error and tick these."
+                        : "On your public error page: Page Template <strong>Modern Error</strong> and these <strong>Template Options</strong>. Put the text below in a Static Content region (Blank with Attributes) in the Content Body slot.");
+                    $("#esd-snippet").text(apexPage ? "" : SNIPPETS[c.type] || "");
+                    $("#esd-snippet-box").toggle(!apexPage);
+                }
+
+                $(SELECTS.concat(SWITCHES).map(function (s) { return "#" + s.item; }).concat(["#P2_TYPE"]).join(",")).on("change", render);
+                $("#P2_DEVICE").on("change", function () { $("#esd-stage").attr("data-device", $v("P2_DEVICE")); });
+                $(document).on("click", ".js-esd-copy", function () {
+                    var t = $(this).attr("data-target");
+                    navigator.clipboard.writeText($("#" + t).text()).then(function () { apex.message.showPageSuccess("Copied."); });
+                });
+                $(document).on("click", ".js-esd-open", function () { window.open(pageUrl($v("P2_TYPE")) + "#me=" + encodeURIComponent(chosen().cls.join(" ")), "_blank"); });
+                render();
+            })(apex.jQuery);
+            ```
+    }
+    css {
+        inline:
+            ```css
+            .esd-Stage { display: flex; justify-content: center; align-items: center; height: min(80vh, 760px); min-height: 520px; overflow: hidden; border-radius: 12px;
+                         border: 1px solid var(--ut-component-border-color, #ddd); background: repeating-conic-gradient(rgba(0,0,0,.035) 0 25%, transparent 0 50%) 0 0 / 24px 24px; }
+            .esd-Stage iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; transition: width .3s ease, border-radius .3s ease; }
+            .esd-Stage[data-device="TABLET"], .esd-Stage[data-device="PHONE"] { padding: 16px 0; }
+            .esd-Stage[data-device="TABLET"] iframe { width: 820px; max-width: calc(100% - 32px); border-radius: 20px; box-shadow: 0 0 0 12px #1f2329, 0 24px 48px -12px rgba(0,0,0,.45); }
+            .esd-Stage[data-device="PHONE"] iframe { width: 390px; max-width: calc(100% - 32px); border-radius: 28px; box-shadow: 0 0 0 10px #1f2329, 0 24px 48px -12px rgba(0,0,0,.45); }
+            .esd-List { display: grid; grid-template-columns: auto 1fr; gap: .375rem 1rem; margin: 0 0 1rem; font-size: .875rem; }
+            .esd-List dt { opacity: .7; }
+            .esd-List dd { margin: 0; font-weight: 600; }
+            .esd-List dd.is-default::after { content: " (default)"; font-weight: 400; opacity: .6; }
+            .esd-Code { margin: 0 0 1rem; padding: .875rem 1rem; overflow-x: auto; border-radius: 8px; background: #1f2329; color: #e6edf3; font-size: .8125rem; line-height: 1.5; white-space: pre-wrap; }
+            .esd-Where { margin: 0 0 .75rem; padding: .625rem .875rem; border-radius: 8px; background: rgba(30,58,138,.08); font-size: .8125rem; line-height: 1.5; }
+            .esd-H { margin: 1rem 0 .5rem; font-size: .875rem; font-weight: 700; }
+            @media (max-width: 640px) { .esd-Stage { height: 72vh; min-height: 460px; } }
+            ```
+    }
+    security {
+        authentication: public
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region breadcrumb (
+        name: Designer
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: [
+                #DEFAULT#
+                t-BreadcrumbRegion--useBreadcrumbTitle
+            ]
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region options (
+        name: Template Options
+        type: staticContent
+        layout {
+            sequence: 20
+            slot: body
+            columnSpan: 4
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region preview (
+        name: Live Preview
+        type: staticContent
+        source {
+            htmlCode: <div class="esd-Stage" id="esd-stage" data-device="DESKTOP"><iframe id="esd-frame" title="Error page preview" data-app="&APP_ID." data-session="&APP_SESSION."></iframe></div>
+        }
+        layout {
+            sequence: 30
+            slot: body
+            startNewRow: false
+            columnSpan: 8
+        }
+        appearance {
+            template: @/standard
+            templateOptions: [
+                #DEFAULT#
+                t-Region--noPadding
+            ]
+        }
+    )
+
+    region summary (
+        name: Your Choice
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="esd-Where" id="esd-where"></p>
+                <div id="esd-summary"></div>
+                <pre class="esd-Code" id="esd-code"></pre>
+                <button type="button" class="t-Button t-Button--small t-Button--iconLeft js-esd-copy" data-target="esd-code"><span class="t-Icon fa fa-copy" aria-hidden="true"></span><span class="t-Button-label">Copy Options</span></button>
+                <div id="esd-snippet-box">
+                  <p class="esd-H">Region content</p>
+                  <pre class="esd-Code" id="esd-snippet"></pre>
+                  <button type="button" class="t-Button t-Button--small t-Button--iconLeft js-esd-copy" data-target="esd-snippet"><span class="t-Icon fa fa-copy" aria-hidden="true"></span><span class="t-Button-label">Copy HTML</span></button>
+                </div>
+                ```
+        }
+        layout {
+            sequence: 10
+            parentRegion: @options
+            slot: subRegions
+        }
+        appearance {
+            template: @/content-block
+            templateOptions: [
+                #DEFAULT#
+                t-ContentBlock--h3
+            ]
+        }
+    )
+
+    pageItem P2_TYPE (
+        type: selectList
+        label {
+            label: Page
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Not Found (404);not-found,Access Denied (403);access-denied,Session Expired;session-expired,Maintenance (503);maintenance,Server Error (500);server-error,Offline;offline,APEX Error Page;apex
+            displayNullValue: false
+        }
+        layout {
+            sequence: 1
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: not-found
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_DESIGN (
+        type: selectList
+        label {
+            label: Design
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Big Number;me-Design--bignum,Split Panel;me-Design--split,Neon;me-Design--neon,Glitch;me-Design--glitch,Terminal;me-Design--terminal,Editorial;me-Design--editorial,Soft UI;me-Design--soft,Bold;me-Design--bold,Space;me-Design--space,Blueprint;me-Design--blueprint,Wave;me-Design--wave
+            nullDisplayValue: Classic
+        }
+        layout {
+            sequence: 5
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: me-Design--bignum
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_ART (
+        type: selectList
+        label {
+            label: Illustration
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Not Found;me-Art--notfound,Access Denied;me-Art--denied,Session Expired;me-Art--expired,Maintenance;me-Art--maintenance,Server Error;me-Art--server,Offline;me-Art--offline,Hide;me-Art--none
+            nullDisplayValue: Matches the Page
+        }
+        layout {
+            sequence: 10
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_ACCENT (
+        type: selectList
+        label {
+            label: Accent Color
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Ocean;me-Accent--ocean,Indigo;me-Accent--indigo,Violet;me-Accent--violet,Emerald;me-Accent--emerald,Rose;me-Accent--rose,Amber;me-Accent--amber,Slate;me-Accent--slate,Wine;me-Accent--wine,Tangerine;me-Accent--tangerine,Cyan;me-Accent--cyan
+            nullDisplayValue: Design Default / Theme Color
+        }
+        layout {
+            sequence: 20
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: me-Accent--indigo
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_SCHEME (
+        type: selectList
+        label {
+            label: Color Scheme
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Dark;me-Scheme--dark,Follow Device Setting;me-Scheme--auto
+            nullDisplayValue: Light
+        }
+        layout {
+            sequence: 30
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_BACKGROUND (
+        type: selectList
+        label {
+            label: Background
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Mesh Gradient;me-Bg--mesh,Bold Gradient;me-Bg--gradient,Dot Grid;me-Bg--dots,Grid Lines;me-Bg--grid,Rings;me-Bg--rings,Solid;me-Bg--solid
+            nullDisplayValue: Design Default / Glow
+        }
+        layout {
+            sequence: 40
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_WIDTH (
+        type: selectList
+        label {
+            label: Width
+            alignment: left
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Wide;me-Width--wide
+            nullDisplayValue: Regular
+        }
+        layout {
+            sequence: 50
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_ANIM_ENTRANCE (
+        type: switch
+        label {
+            label: Entrance Animation
+            alignment: left
+        }
+        layout {
+            sequence: 90
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: Y
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_ANIM_ART (
+        type: switch
+        label {
+            label: Animated Illustration
+            alignment: left
+        }
+        layout {
+            sequence: 100
+            region: @options
+            slot: regionBody
+            alignment: left
+            startNewRow: false
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: Y
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_COPY (
+        type: switch
+        label {
+            label: Copy Error Details Button
+            alignment: left
+        }
+        layout {
+            sequence: 110
+            region: @options
+            slot: regionBody
+            alignment: left
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: Y
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_ONLINE (
+        type: switch
+        label {
+            label: Reload When Back Online
+            alignment: left
+        }
+        layout {
+            sequence: 120
+            region: @options
+            slot: regionBody
+            alignment: left
+            startNewRow: false
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        default {
+            type: static
+            staticValue: Y
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P2_DEVICE (
+        type: radioGroup
+        label {
+            label: Preview On
+            alignment: left
+        }
+        settings {
+            noOfCols: 3
+        }
+        lov {
+            type: staticValues
+            staticValues: STATIC2:Desktop;DESKTOP,Tablet;TABLET,Phone;PHONE
+            displayNullValue: false
+        }
+        layout {
+            sequence: 10
+            region: @preview
+            slot: edit
+        }
+        appearance {
+            template: @/hidden
+            templateOptions: [
+                #DEFAULT#
+                t-Form-fieldContainer--radioButtonGroup
+            ]
+        }
+        default {
+            type: static
+            staticValue: DESKTOP
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    button open-full (
+        buttonName: OPEN_FULL
+        label: Open Full Page
+        layout {
+            sequence: 20
+            region: @preview
+            slot: edit
+        }
+        appearance {
+            buttonTemplate: @/text-with-icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--iconLeft
+            ]
+            cssClasses: js-esd-open
+            icon: fa-external-link
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+
+)

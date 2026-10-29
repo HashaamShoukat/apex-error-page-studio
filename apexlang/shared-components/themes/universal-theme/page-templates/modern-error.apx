@@ -1,0 +1,942 @@
+pageTemplate modern-error (
+    name: Modern Error
+    templateClass: login
+    templateOptions {
+        default: [
+            me-Anim--entrance
+            me-Anim--art
+            me-Fx--copy
+            me-Fx--online
+        ]
+    }
+    page {
+        header:
+            ```html
+            <!DOCTYPE html>
+            <html class="no-js #RTL_CLASS# page-&APP_PAGE_ID!ATTR. app-&APP_ALIAS!ATTR." lang="&BROWSER_LANGUAGE!ATTR." #TEXT_DIRECTION#>
+            <head>
+              <meta charset="utf-8">
+              <title>#TITLE#</title>
+              #APEX_CSS#
+              #THEME_CSS#
+              #TEMPLATE_CSS#
+            <style id="me-css-2">
+            /* Blueprint: a technical drawing on blue grid paper */
+            .me-Design--blueprint .me-Stage { border: 1.5px dashed var(--me-border); box-shadow: none; }
+            .me-Design--blueprint .me-Stage::before { content: "FIG. 1"; position: absolute; top: .75rem; inset-inline-start: 1rem; color: var(--me-muted); font: 600 .6875rem var(--me-mono); letter-spacing: .12em; }
+            .me-Design--blueprint :is(.me-Code, .me-Text, .me-Btn) { font-family: var(--me-mono); }
+            .me-Design--blueprint .me-Code { background: transparent; border: 1px solid var(--me-border); border-radius: 2px; color: #ffffff !important; }
+            .me-Design--blueprint .me-Btn { background: transparent; border-color: var(--me-border); color: #ffffff !important; }
+            .me-Design--blueprint .me-Btn--primary { background: #ffffff; color: var(--me-accent) !important; box-shadow: none; }
+            .me-Design--blueprint .me-Links a { color: #ffffff; }
+
+            /* Wave: a coloured band with a wave edge; the card sits over it */
+            .me-Design--wave .me-Main { align-items: flex-start; padding-top: max(13vh, 4rem); }
+
+            /* phones */
+            @media (max-width: 600px) {
+              .me-Stage { padding: 1.75rem 1.25rem; }
+              .me-Actions { flex-direction: column; }
+              .me-Actions .me-Btn { width: 100%; }
+              .me-Design--wave .me-Bg::before { height: max(30vh, 12rem); }
+              .me-Design--wave .me-Main { padding-top: max(8vh, 3rem); }
+            }
+
+            /* motion */
+            @keyframes me-rise { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+            @keyframes me-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+            @keyframes me-blink { 50% { opacity: 0; } }
+            @keyframes me-flicker { 0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: .35; } }
+            @keyframes me-glitch {
+              0% { transform: none; } 12% { transform: translate(-3px, 1px) skewX(-4deg); text-shadow: -5px 0 var(--me-accent), 4px 0 var(--me-accent-2); }
+              14% { transform: none; } 47% { transform: translate(3px, -2px); clip-path: inset(20% 0 45% 0); } 49% { transform: none; clip-path: none; }
+              78% { transform: translate(-2px, 0) skewX(6deg); text-shadow: 5px 0 var(--me-accent), -4px 0 var(--me-accent-2); } 80% { transform: none; }
+            }
+            .me-Anim--entrance .me-Stage { animation: me-rise .7s cubic-bezier(.2, .8, .2, 1) both; }
+            .me-Anim--art .me-Art { animation: me-float 5s ease-in-out infinite; }
+            @media (prefers-reduced-motion: reduce) {
+              .me-Page *, .me-Page *::before, .me-Page *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+            }
+            @media (forced-colors: active) {
+              .me-Bg { display: none; }
+              .me-Stage { border: 1px solid CanvasText; }
+              .me-Art { background: CanvasText; }
+            }
+            </style>
+              #THEME_STYLE_CSS#
+              #APPLICATION_CSS#
+              #PAGE_CSS#
+              #FAVICONS#
+              #HEAD#
+              <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+            </head>
+            <body class="me-Page #PAGE_CSS_CLASSES#" #TEXT_DIRECTION# #ONLOAD#>
+            <script>
+            /* Modern Error: the Error Page Studio designer previews a look through the URL hash (#me=me-Design--neon ...) */
+            window.modernError = (function (body) {
+              var LOOK = /^me-(Design|Art|Accent|Scheme|Bg|Width|Anim|Fx)-/;
+              function applyPreview() {
+                var m = /[#&]me=([^&]*)/.exec(window.location.hash);
+                if (!m) { return; }
+                Array.prototype.slice.call(body.classList).forEach(function (c) { if (LOOK.test(c)) { body.classList.remove(c); } });
+                decodeURIComponent(m[1]).split(/[\s,]+/).forEach(function (c) { if (LOOK.test(c)) { body.classList.add(c); } });
+              }
+              try { applyPreview(); } catch (e) { /* never block an error page */ }
+              return { applyPreview: applyPreview };
+            })(document.body);
+            </script>
+            <noscript class="t-PageBody-noScript">&APP_TEXT$APEX_PAGE_NOSCRIPT.</noscript>
+            #FORM_OPEN#
+            <div class="me-Bg" aria-hidden="true"><div class="me-Bg-media">#BACKGROUND_IMAGE#</div></div>
+            ```
+        body:
+            ```html
+            <div class="me-Shell">
+              <div class="me-TopBar">#REGION_POSITION_02#</div>
+              <main class="me-Main" id="main">
+                <div class="me-Stage">
+                  <div class="me-Artbox" aria-hidden="true"><div class="me-Art"></div></div>
+                  <div class="me-Content">#SUCCESS_MESSAGE##NOTIFICATION_MESSAGE##GLOBAL_NOTIFICATION##BODY#</div>
+                </div>
+              </main>
+              <div class="me-Footer">#REGION_POSITION_04#</div>
+            </div>
+            ```
+        footer:
+            ```html
+            #FORM_CLOSE#
+            #DEVELOPER_TOOLBAR#
+            #APEX_JAVASCRIPT#
+            #GENERATED_CSS#
+            #THEME_JAVASCRIPT#
+            #TEMPLATE_JAVASCRIPT#
+            #APPLICATION_JAVASCRIPT#
+            #PAGE_JAVASCRIPT#
+            #GENERATED_JAVASCRIPT#
+            </body>
+            </html>
+            ```
+    }
+    javaScript {
+        executeWhenPageLoads:
+            ```javascript-browser
+            // Modern Error behaviour, switched by template options; texts from text messages MODERN_ERROR.* when defined
+            (function ($, me) {
+                var body = document.body;
+                function has(c) { return body.classList.contains(c); }
+                function msg(key, fallback) {
+                    var t = apex.lang.getMessage(key);
+                    return (!t || t === key) ? fallback : t;
+                }
+
+                // designer preview: follow hash changes without a reload
+                window.addEventListener("hashchange", function () { me.applyPreview(); });
+
+                // Back: the previous page, or the home page when there is none
+                $(document).on("click", ".me-Back", function (e) {
+                    e.preventDefault();
+                    if (window.history.length > 1) { window.history.back(); } else { window.location.href = $(".me-Home").attr("href") || "./"; }
+                });
+
+                // Try Again
+                $(document).on("click", ".me-Reload", function (e) { e.preventDefault(); window.location.reload(); });
+
+                // Copy Error Details (APEX error page): message, details, page and time - ready for a support ticket
+                var err = $(".me-Error");
+                if (err.length && has("me-Fx--copy") && navigator.clipboard) {
+                    $('<button type="button" class="me-Btn me-Copy"></button>')
+                        .text(msg("MODERN_ERROR.COPY", "Copy details"))
+                        .appendTo(err.find(".me-Actions"))
+                        .on("click", function () {
+                            var b = this,
+                                text = [err.find(".me-Title").text(), err.find(".me-Text").text(), err.find(".me-Tech").text(),
+                                        "Page: " + window.location.href.split("#")[0], "Time: " + new Date().toISOString()]
+                                       .map(function (s) { return $.trim(s); }).filter(Boolean).join("\n");
+                            navigator.clipboard.writeText(text).then(function () {
+                                b.classList.add("me-Copied");
+                                setTimeout(function () { b.classList.remove("me-Copied"); }, 2000);
+                            });
+                        });
+                }
+
+                // Reload When Back Online: an offline page comes back by itself
+                if (has("me-Fx--online")) {
+                    window.addEventListener("online", function () { window.location.reload(); });
+                }
+            })(apex.jQuery, window.modernError);
+            ```
+    }
+    css {
+        inline:
+            ```css
+            /* Modern Error page template (Error Page Studio). Every look is a template option, rendered as a body class me-*.
+               APEX's own error page uses the template's Default Template Options; custom error pages pick their own. */
+            .me-Page {
+              --me-accent: var(--ut-palette-primary, #2f6f8f);
+              --me-accent-2: color-mix(in srgb, var(--me-accent) 55%, #ffffff);
+              --me-on-accent: #ffffff;
+              --me-bg: #eef1f5;
+              --me-surface: #ffffff;
+              --me-text: #16191d;
+              --me-muted: #5f6670;
+              --me-border: rgba(16, 24, 40, .12);
+              --me-radius: 24px;
+              --me-ctl-radius: 10px;
+              --me-width: 34rem;
+              --me-shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 24px 60px -16px rgba(16, 24, 40, .28);
+              --me-art-fill: linear-gradient(135deg, var(--me-accent), var(--me-accent-2));
+              --me-panel: linear-gradient(150deg, var(--me-accent), color-mix(in srgb, var(--me-accent) 70%, #000000));
+              --me-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+              --me-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+            }
+            body.me-Page { margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--me-bg); color: var(--me-text); -webkit-tap-highlight-color: transparent; }
+            /* APEX puts hidden inputs in the form next to the page: a flex column with the shell growing keeps everything centred */
+            body.me-Page #wwvFlowForm { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+
+            /* designs: default colours (Accent Color, Color Scheme and Background still apply on top) */
+            .me-Design--neon, .me-Design--glitch, .me-Design--space { --me-accent: #22d3ee; --me-accent-2: #e879f9; --me-on-accent: #0b1220; }
+            .me-Page:is(.me-Design--neon, .me-Design--glitch, .me-Design--space, .me-Design--terminal, .me-Design--blueprint) {
+              --me-bg: #0b0f19; --me-surface: #121826; --me-text: #eef2f7; --me-muted: #9aa6b5; --me-border: rgba(255, 255, 255, .12);
+              --me-shadow: 0 30px 70px -24px rgba(0, 0, 0, .7); color-scheme: dark;
+            }
+            .me-Design--glitch { --me-accent: #ff2a6d; --me-accent-2: #05d9e8; --me-on-accent: #ffffff; }
+            .me-Design--space { --me-accent: #a78bfa; --me-accent-2: #38bdf8; }
+            .me-Design--terminal { --me-accent: #22c55e; --me-accent-2: #86efac; --me-on-accent: #04130a; }
+            .me-Page.me-Design--terminal { --me-bg: #070b08; --me-surface: #0c120e; --me-text: color-mix(in srgb, var(--me-accent) 30%, #eafff0); --me-muted: color-mix(in srgb, var(--me-accent) 55%, #7a8a80);
+                                           --me-border: color-mix(in srgb, var(--me-accent) 28%, transparent); --me-radius: 8px; --me-ctl-radius: 4px; }
+            .me-Design--blueprint { --me-accent: #1d4ed8; --me-accent-2: #93c5fd; }
+            .me-Page.me-Design--blueprint { --me-bg: color-mix(in srgb, var(--me-accent) 72%, #0b1530); --me-surface: transparent; --me-text: #f1f6ff; --me-muted: #c7d7f2;
+                                            --me-border: rgba(255, 255, 255, .45); --me-radius: 4px; --me-ctl-radius: 2px; --me-art-fill: #ffffff; }
+            .me-Design--soft { --me-accent: #5b6cff; --me-accent-2: #8f7dff; --me-bg: #e5e9f0; --me-surface: #e5e9f0; --me-soft-dark: #c3c9d4; --me-soft-light: #ffffff;
+                               --me-shadow: 14px 14px 30px var(--me-soft-dark), -14px -14px 30px var(--me-soft-light); --me-radius: 30px; --me-ctl-radius: 14px; }
+            .me-Design--bold { --me-accent: #ff4f7b; --me-accent-2: #ffd23f; --me-on-accent: #111111; --me-ink: #111111; --me-bg: #fff2c2; --me-surface: #ffffff;
+                               --me-border: var(--me-ink); --me-radius: 16px; --me-ctl-radius: 10px; --me-shadow: 8px 8px 0 var(--me-ink); }
+            .me-Design--editorial { --me-accent: #7a1c24; --me-accent-2: #b08968; --me-bg: #f2eadb; --me-surface: #fbf7ef; --me-text: #2b1b16; --me-muted: #6f5b51;
+                                    --me-border: rgba(43, 27, 22, .2); --me-radius: 2px; --me-ctl-radius: 2px; }
+            .me-Design--split { --me-width: 60rem; }
+            .me-Design--bignum { --me-width: 44rem; }
+
+            /* accent colours */
+            .me-Accent--ocean     { --me-accent: #0b6e99; --me-accent-2: #22b8cf; --me-on-accent: #ffffff; }
+            .me-Accent--indigo    { --me-accent: #4f46e5; --me-accent-2: #8b5cf6; --me-on-accent: #ffffff; }
+            .me-Accent--violet    { --me-accent: #7c3aed; --me-accent-2: #db2777; --me-on-accent: #ffffff; }
+            .me-Accent--emerald   { --me-accent: #047857; --me-accent-2: #14b8a6; --me-on-accent: #ffffff; }
+            .me-Accent--rose      { --me-accent: #e11d48; --me-accent-2: #f97316; --me-on-accent: #ffffff; }
+            .me-Accent--amber     { --me-accent: #b45309; --me-accent-2: #f59e0b; --me-on-accent: #ffffff; }
+            .me-Accent--slate     { --me-accent: #1e293b; --me-accent-2: #64748b; --me-on-accent: #ffffff; }
+            .me-Accent--wine      { --me-accent: #6b1820; --me-accent-2: #d9b48f; --me-on-accent: #ffffff; }
+            .me-Accent--tangerine { --me-accent: #ea580c; --me-accent-2: #fb923c; --me-on-accent: #ffffff; }
+            .me-Accent--cyan      { --me-accent: #0e7490; --me-accent-2: #22d3ee; --me-on-accent: #ffffff; }
+
+            /* colour scheme */
+            .me-Scheme--dark {
+              --me-bg: #0d1117; --me-surface: #161b22; --me-text: #e6edf3; --me-muted: #9aa4af; --me-border: rgba(255, 255, 255, .12);
+              --me-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 24px 60px -16px rgba(0, 0, 0, .7); color-scheme: dark;
+            }
+            @media (prefers-color-scheme: dark) {
+              .me-Scheme--auto {
+                --me-bg: #0d1117; --me-surface: #161b22; --me-text: #e6edf3; --me-muted: #9aa4af; --me-border: rgba(255, 255, 255, .12);
+                --me-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 24px 60px -16px rgba(0, 0, 0, .7); color-scheme: dark;
+              }
+            }
+            .me-Scheme--dark.me-Design--soft { --me-bg: #2a2e35; --me-surface: #2a2e35; --me-soft-dark: #1c1f24; --me-soft-light: #383d46;
+                                               --me-shadow: 14px 14px 30px var(--me-soft-dark), -14px -14px 30px var(--me-soft-light); }
+            .me-Scheme--dark.me-Design--bold { --me-ink: #f4f4f5; --me-bg: #18181b; --me-surface: #27272a; --me-border: var(--me-ink); --me-shadow: 8px 8px 0 var(--me-ink); }
+            .me-Width--wide { --me-width: 44rem; }
+
+            /* page background (null = a soft accent glow) */
+            .me-Bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+                     background: radial-gradient(60% 55% at 50% 30%, color-mix(in srgb, var(--me-accent) 14%, transparent), transparent 70%), var(--me-bg); }
+            .me-Bg-media { display: none; position: absolute; inset: 0; }
+            .me-Bg-media > *, .me-Bg-media img { display: block; width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; }
+            /* design backgrounds, before the Background options so a chosen option wins */
+            .me-Design--glitch .me-Bg { background: var(--me-bg); }
+            .me-Design--glitch .me-Bg::after, .me-Design--terminal .me-Bg::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .3) 0 1px, transparent 1px 3px); }
+            .me-Design--terminal .me-Bg { background: radial-gradient(ellipse at center, color-mix(in srgb, var(--me-accent) 9%, var(--me-bg)), var(--me-bg) 70%); }
+            .me-Design--space .me-Bg {
+              background: radial-gradient(1.5px 1.5px at 20% 30%, #ffffff, transparent), radial-gradient(1px 1px at 70% 20%, #ffffff, transparent),
+                          radial-gradient(1.5px 1.5px at 85% 65%, #ffffff, transparent), radial-gradient(1px 1px at 35% 80%, #ffffff, transparent),
+                          radial-gradient(1px 1px at 55% 50%, rgba(255, 255, 255, .7), transparent), radial-gradient(1.2px 1.2px at 10% 70%, #ffffff, transparent),
+                          radial-gradient(60% 50% at 50% 110%, color-mix(in srgb, var(--me-accent) 35%, transparent), transparent 70%), var(--me-bg);
+              background-size: 260px 260px, 330px 330px, 410px 410px, 290px 290px, 190px 190px, 370px 370px, 100% 100%, 100% 100%;
+            }
+            .me-Design--space .me-Bg::after { content: ""; position: absolute; right: -12vmax; bottom: -16vmax; width: 42vmax; aspect-ratio: 1; border-radius: 50%;
+                                              background: radial-gradient(circle at 30% 30%, var(--me-accent-2), var(--me-accent) 55%, color-mix(in srgb, var(--me-accent) 40%, #000000));
+                                              box-shadow: 0 0 120px -20px var(--me-accent); opacity: .85; }
+            .me-Design--blueprint .me-Bg { background: linear-gradient(rgba(255, 255, 255, .09) 1px, transparent 1px) 0 0 / 24px 24px,
+                                                       linear-gradient(90deg, rgba(255, 255, 255, .09) 1px, transparent 1px) 0 0 / 24px 24px,
+                                                       linear-gradient(rgba(255, 255, 255, .16) 1px, transparent 1px) 0 0 / 120px 120px,
+                                                       linear-gradient(90deg, rgba(255, 255, 255, .16) 1px, transparent 1px) 0 0 / 120px 120px, var(--me-bg); }
+            .me-Design--bold .me-Bg { background: radial-gradient(color-mix(in srgb, var(--me-ink) 16%, transparent) 1.5px, transparent 2px) 0 0 / 26px 26px, var(--me-bg); }
+            .me-Design--soft .me-Bg, .me-Design--editorial .me-Bg { background: var(--me-bg); }
+            .me-Design--neon .me-Bg { background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--me-accent) 10%, var(--me-bg)), var(--me-bg) 62%); }
+            .me-Design--wave .me-Bg::before {
+              content: ""; position: absolute; inset: 0 0 auto 0; height: max(44vh, 16rem); background: var(--me-panel);
+              -webkit-mask: linear-gradient(#000000 0 0) top / 100% calc(100% - 4.9rem) no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1440V44C1320 84 1200 112 1020 108S700 40 520 36 200 96 0 70Z'/%3E%3C/svg%3E") bottom / 100% 5rem no-repeat;
+                      mask: linear-gradient(#000000 0 0) top / 100% calc(100% - 4.9rem) no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1440V44C1320 84 1200 112 1020 108S700 40 520 36 200 96 0 70Z'/%3E%3C/svg%3E") bottom / 100% 5rem no-repeat;
+            }
+            /* Background options */
+            .me-Bg--mesh .me-Bg { background: radial-gradient(at 12% 18%, color-mix(in srgb, var(--me-accent) 50%, transparent) 0, transparent 50%),
+                                              radial-gradient(at 88% 12%, color-mix(in srgb, var(--me-accent-2) 45%, transparent) 0, transparent 50%),
+                                              radial-gradient(at 80% 88%, color-mix(in srgb, var(--me-accent) 35%, transparent) 0, transparent 55%), var(--me-bg); }
+            .me-Bg--gradient { --me-bg: color-mix(in srgb, var(--me-accent) 85%, #000000); }
+            .me-Bg--gradient .me-Bg { background: linear-gradient(135deg, var(--me-accent), color-mix(in srgb, var(--me-accent) 50%, var(--me-accent-2)) 55%, var(--me-accent-2)); }
+            .me-Bg--dots .me-Bg { background: radial-gradient(color-mix(in srgb, var(--me-text) 16%, transparent) 1px, transparent 1.5px) 0 0 / 22px 22px,
+                                              radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--me-accent) 20%, transparent), transparent 60%), var(--me-bg); }
+            .me-Bg--grid .me-Bg { background: radial-gradient(ellipse 70% 55% at 50% 0%, color-mix(in srgb, var(--me-accent) 20%, transparent), transparent 70%),
+                                              linear-gradient(color-mix(in srgb, var(--me-text) 7%, transparent) 1px, transparent 1px) 0 0 / 40px 40px,
+                                              linear-gradient(90deg, color-mix(in srgb, var(--me-text) 7%, transparent) 1px, transparent 1px) 0 0 / 40px 40px, var(--me-bg); }
+            .me-Bg--rings .me-Bg { background: repeating-radial-gradient(circle at 100% 100%, transparent 0 44px, color-mix(in srgb, var(--me-accent) 22%, transparent) 44px 46px),
+                                               radial-gradient(circle at 0 0, color-mix(in srgb, var(--me-accent-2) 22%, transparent), transparent 45%), var(--me-bg); }
+            .me-Bg--solid .me-Bg { background: var(--me-bg); }
+            .me-Bg--image .me-Bg { background: #000000; }
+            .me-Bg--image .me-Bg-media { display: block; }
+            .me-Bg--image .me-Bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, color-mix(in srgb, var(--me-accent) 40%, rgba(0, 0, 0, .3)), rgba(0, 0, 0, .55)); }
+            .me-Bg--image .me-Bg::before { display: none; }
+
+            /* shell */
+            .me-Shell { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+            .me-TopBar { padding: calc(1rem + env(safe-area-inset-top)) 1.25rem 0; color: var(--me-text); font-weight: 600; }
+            .me-TopBar:empty, .me-Footer:empty { display: none; }
+            .me-Main { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(1.25rem, 5vh, 3rem) 1rem; }
+            .me-Footer { padding: 0 1rem calc(1rem + env(safe-area-inset-bottom)); color: var(--me-muted); font-size: .8125rem; text-align: center; }
+            .me-Footer a, .me-TopBar a { color: inherit; }
+            .me-Bg--image :is(.me-TopBar, .me-Footer), .me-Bg--gradient :is(.me-TopBar, .me-Footer), .me-Design--wave .me-TopBar { color: #ffffff; }
+            .me-Stage { position: relative; box-sizing: border-box; width: 100%; max-width: var(--me-width); padding: clamp(1.75rem, 5vw, 3rem);
+                        border-radius: var(--me-radius); background: var(--me-surface); box-shadow: var(--me-shadow); color: var(--me-text); text-align: center; }
+            .me-Content { min-width: 0; container-type: inline-size; }
+            .me-Content .t-Region, .me-Content .t-Region-body { background: transparent; border: 0; box-shadow: none; color: inherit; padding: 0; }
+
+            /* illustration (Illustration option; the APEX error page shows the unplugged plug when none is chosen) */
+            .me-Artbox { display: none; }
+            .me-Art { width: min(13rem, 62%); aspect-ratio: 200 / 160; margin: 0 auto; background: var(--me-art-fill);
+                      -webkit-mask: var(--me-art) center / contain no-repeat; mask: var(--me-art) center / contain no-repeat; }
+            .me-Art--notfound { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M42 18h70l28 28v74'/%3E%3Cpath d='M112 18v28h28'/%3E%3Cpath d='M42 18v118h56'/%3E%3Cpath d='M60 62h50M60 80h34'/%3E %3Ccircle cx='128' cy='112' r='24'/%3E%3Cpath d='M146 130l22 22'/%3E%3Cpath d='M120 104a8 8 0 1 1 11 7c-3 1.5-3 3-3 6'/%3E%3Cpath d='M128 126v.5'/%3E%3C/svg%3E"); }
+            .me-Art--denied { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M100 14l56 20v40c0 36-25 62-56 72-31-10-56-36-56-72V34z'/%3E%3Crect x='78' y='70' width='44' height='36' rx='7'/%3E %3Cpath d='M87 70v-9a13 13 0 0 1 26 0v9'/%3E%3Cpath d='M100 84v10'/%3E%3C/svg%3E"); }
+            .me-Art--expired { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M62 16h76M62 144h76'/%3E%3Cpath d='M72 16c0 34 28 42 28 64s-28 30-28 64'/%3E%3Cpath d='M128 16c0 34-28 42-28 64s28 30 28 64'/%3E %3Cpath d='M80 142l20-16 20 16z'/%3E%3Cpath d='M86 40h28l-14 14z'/%3E%3Cpath d='M100 88v26'/%3E%3C/svg%3E"); }
+            .me-Art--maintenance { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M86 30h18l26 104H60z'/%3E%3Cpath d='M76 66h38M70 96h50'/%3E%3Cpath d='M44 134h102'/%3E %3Cpath d='M166 40a16 16 0 0 0-22 18l-14 14 9 9 14-14a16 16 0 0 0 18-22l-9 9-9-3-3-9z'/%3E%3C/svg%3E"); }
+            .me-Art--server, .me-Page:not([class*="me-Art--"]) .me-Stage:has(.me-Error) { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 110c20 0 22-24 40-24'/%3E%3Crect x='58' y='70' width='32' height='32' rx='6'/%3E%3Cpath d='M90 78h12M90 94h12'/%3E %3Crect x='120' y='66' width='34' height='40' rx='8'/%3E%3Cpath d='M130 80h6M130 92h6'/%3E%3Cpath d='M154 86c14 0 18 18 32 18'/%3E %3Cpath d='M108 40l-8 14h12l-8 14'/%3E%3Cpath d='M88 46l-6-6M128 46l6-6'/%3E%3C/svg%3E"); }
+            .me-Art--offline { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M58 118h86a26 26 0 0 0 4-52 38 38 0 0 0-72-6 28 28 0 0 0-18 58z'/%3E%3Cpath d='M40 146L160 22'/%3E%3C/svg%3E"); }
+            .me-Page[class*="me-Art--"] .me-Artbox, .me-Page .me-Stage:has(.me-Error) .me-Artbox { display: block; margin-block-end: 1.25rem; }
+            .me-Page.me-Art--none .me-Artbox { display: none !important; }
+
+            /* content: code, title, text, actions (helper classes for your own regions too) */
+            .me-Code { display: inline-block; margin: 0 0 .875rem; padding: .25rem .875rem; border-radius: 999px; background: color-mix(in srgb, var(--me-accent) 13%, transparent);
+                       color: var(--me-accent); font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+            .me-Scheme--dark .me-Code, .me-Page:is(.me-Design--neon, .me-Design--glitch, .me-Design--space) .me-Code { color: var(--me-accent-2); }
+            .me-Title, .me-Content h1, .me-Content h2 { margin: 0 0 .75rem; color: var(--me-text); font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.25rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; }
+            .me-Text, .me-Content p:not(.me-Code) { margin: 0 0 1.5rem; color: var(--me-muted); font-size: 1rem; line-height: 1.6; }
+            .me-Error .me-Text { white-space: pre-line; }
+            /* APEX's messages are sentences, not headlines */
+            .me-Error .me-Title { font-size: clamp(1.125rem, 1rem + .7vw, 1.5rem); letter-spacing: -.01em; line-height: 1.3; }
+            .me-Tech:empty { display: none; }
+            .me-Tech { margin: 0 0 1.25rem; padding: .75rem 1rem; max-height: 12rem; overflow: auto; border-radius: 10px; text-align: start;
+                       background: color-mix(in srgb, var(--me-text) 6%, transparent); font: .75rem/1.5 var(--me-mono); }
+            .me-Actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
+            .me-Btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; box-sizing: border-box; min-height: 2.75rem; padding: 0 1.25rem;
+                      border: 1px solid var(--me-border); border-radius: var(--me-ctl-radius); background: var(--me-surface); color: var(--me-text) !important;
+                      font: inherit; font-weight: 600; text-decoration: none !important; cursor: pointer; transition: transform .15s ease, filter .15s ease, background-color .15s ease; }
+            .me-Btn:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--me-text) 5%, var(--me-surface)); }
+            .me-Btn--primary { border-color: transparent; background: linear-gradient(135deg, var(--me-accent), color-mix(in srgb, var(--me-accent) 62%, var(--me-accent-2)));
+                               color: var(--me-on-accent) !important; box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--me-accent) 75%, transparent); }
+            .me-Btn--primary:hover { background: linear-gradient(135deg, var(--me-accent), color-mix(in srgb, var(--me-accent) 62%, var(--me-accent-2))); filter: brightness(1.07); }
+            .me-Btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--me-accent) 45%, transparent); outline-offset: 2px; }
+            .me-Home { display: inline-block; margin-block-start: 1.25rem; color: var(--me-muted) !important; font-size: .875rem; text-decoration: underline; }
+            .me-Home:empty { display: none; }
+            .me-Links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.25rem; margin: 1.5rem 0 0; padding: 0; list-style: none; font-size: .875rem; }
+            .me-Links a { color: var(--me-accent); font-weight: 600; }
+            .me-Scheme--dark .me-Links a { color: var(--me-accent-2); }
+            .me-Copied::after { content: " \2713"; }
+            .me-Stage .t-Body-alert { max-width: none; margin: 0 0 1rem; text-align: start; }
+
+            /* ================= designs ================= */
+            /* Big Number: no card, a huge gradient code */
+            .me-Design--bignum .me-Stage { background: transparent; box-shadow: none; }
+            .me-Page:is(.me-Design--bignum, .me-Design--neon, .me-Design--glitch, .me-Design--editorial, .me-Design--soft, .me-Design--space) .me-Code {
+              display: block; margin: 0 0 .5rem; padding: 0; background: none; border-radius: 0; font-size: min(11rem, 24cqi); font-weight: 900;
+              letter-spacing: -.05em; line-height: .95; text-transform: none;
+            }
+            .me-Page.me-Design--bignum .me-Code { background-image: linear-gradient(135deg, var(--me-accent), var(--me-accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent !important; }
+            :is(.me-Design--bignum, .me-Design--neon, .me-Design--glitch, .me-Design--editorial, .me-Design--soft) .me-Stage:has(.me-Code) .me-Artbox { display: none; }
+
+            /* Split Panel: the illustration on a coloured panel next to the text */
+            .me-Design--split .me-Stage { padding: 0; overflow: hidden; }
+            .me-Design--split .me-Artbox { display: flex !important; align-items: center; justify-content: center; margin: 0 !important; padding: 2.5rem 1.5rem; background: var(--me-panel); }
+            .me-Design--split .me-Art { --me-art-fill: #ffffff; width: min(12rem, 60%); }
+            .me-Page.me-Design--split:not([class*="me-Art--"]) .me-Stage:not(:has(.me-Error)) .me-Art { --me-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M42 18h70l28 28v74'/%3E%3Cpath d='M112 18v28h28'/%3E%3Cpath d='M42 18v118h56'/%3E%3Cpath d='M60 62h50M60 80h34'/%3E %3Ccircle cx='128' cy='112' r='24'/%3E%3Cpath d='M146 130l22 22'/%3E%3Cpath d='M120 104a8 8 0 1 1 11 7c-3 1.5-3 3-3 6'/%3E%3Cpath d='M128 126v.5'/%3E%3C/svg%3E"); }
+            .me-Design--split .me-Content { padding: clamp(1.75rem, 4vw, 3rem); }
+            @media (min-width: 761px) {
+              .me-Design--split .me-Stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); text-align: start; }
+              .me-Design--split .me-Artbox { padding: 3rem; }
+              .me-Design--split .me-Art { width: min(16rem, 80%); }
+              .me-Design--split .me-Content { align-self: center; }
+              .me-Design--split .me-Actions, .me-Design--split .me-Links { justify-content: flex-start; }
+            }
+
+            /* Neon: glowing, flickering code */
+            .me-Design--neon .me-Stage, .me-Design--glitch .me-Stage, .me-Design--space .me-Stage { background: transparent; box-shadow: none; }
+            .me-Design--neon .me-Code { color: var(--me-accent) !important; text-shadow: 0 0 8px var(--me-accent), 0 0 24px var(--me-accent), 0 0 60px color-mix(in srgb, var(--me-accent) 60%, transparent); }
+            .me-Design--neon.me-Anim--art .me-Code { animation: me-flicker 4s linear infinite; }
+            .me-Design--neon .me-Art { filter: drop-shadow(0 0 10px var(--me-accent)); }
+            .me-Design--neon .me-Btn--primary { background: transparent; color: var(--me-accent) !important; border: 2px solid var(--me-accent); box-shadow: 0 0 18px -4px var(--me-accent), inset 0 0 14px -6px var(--me-accent); }
+            .me-Design--neon .me-Btn--primary:hover { background: var(--me-accent); color: var(--me-on-accent) !important; filter: none; }
+
+            /* Glitch: a jittering, colour-split code */
+            .me-Design--glitch .me-Code { color: #ffffff !important; text-shadow: -3px 0 var(--me-accent), 3px 0 var(--me-accent-2); }
+            .me-Design--glitch.me-Anim--art .me-Code { animation: me-glitch 2.6s steps(1) infinite; }
+            .me-Design--glitch .me-Title { text-transform: uppercase; letter-spacing: .04em; }
+            .me-Design--glitch .me-Btn { border-radius: 0; }
+            .me-Design--glitch .me-Btn--primary { background: var(--me-accent); box-shadow: 4px 4px 0 var(--me-accent-2); }
+
+            /* Terminal: a console window */
+            .me-Design--terminal .me-Stage { padding-top: 3.5rem; border: 1px solid var(--me-border); text-align: start; font-family: var(--me-mono);
+                                             box-shadow: 0 30px 80px -24px color-mix(in srgb, var(--me-accent) 30%, transparent); }
+            .me-Design--terminal .me-Stage::before { content: ""; position: absolute; top: 1.05rem; inset-inline-start: 1.25rem; width: .7rem; height: .7rem; border-radius: 50%;
+                                                     background: #ff5f56; box-shadow: 1.1rem 0 #ffbd2e, 2.2rem 0 #27c93f; }
+            .me-Design--terminal .me-Stage::after { content: ""; position: absolute; top: 2.75rem; inset-inline: 0; height: 1px; background: var(--me-border); }
+            .me-Design--terminal .me-Artbox { display: none !important; }
+            .me-Design--terminal :is(.me-Code, .me-Title, .me-Text, .me-Btn, .me-Tech, .me-Home, .me-Links) { font-family: var(--me-mono); }
+            .me-Design--terminal .me-Code { padding: 0; background: none; color: var(--me-accent); letter-spacing: 0; }
+            .me-Design--terminal .me-Code::before { content: "$ status: "; color: var(--me-muted); text-transform: none; }
+            .me-Design--terminal .me-Title { font-size: 1.375rem; color: var(--me-accent); letter-spacing: 0; }
+            .me-Design--terminal .me-Title::after { content: ""; display: inline-block; width: .55em; height: 1.05em; margin-inline-start: .25em; vertical-align: -.15em; background: var(--me-accent); animation: me-blink 1.1s steps(1) infinite; }
+            .me-Design--terminal .me-Actions, .me-Design--terminal .me-Links { justify-content: flex-start; }
+            .me-Design--terminal .me-Btn { background: transparent; border-color: var(--me-border); }
+            .me-Design--terminal .me-Btn--primary { color: var(--me-accent) !important; border: 1px solid var(--me-accent); box-shadow: 0 0 18px -6px var(--me-accent); text-transform: uppercase; letter-spacing: .1em; }
+            .me-Design--terminal .me-Btn--primary:hover { background: var(--me-accent); color: var(--me-on-accent) !important; filter: none; }
+
+            /* Editorial: paper, serif, fine rules */
+            .me-Design--editorial .me-Stage { border: 1px solid var(--me-border); box-shadow: 0 30px 60px -30px rgba(43, 27, 22, .35); }
+            .me-Design--editorial .me-Stage::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--me-border); pointer-events: none; }
+            .me-Design--editorial .me-Code { font-family: var(--me-serif); font-style: italic; font-weight: 400; color: var(--me-accent) !important; }
+            .me-Design--editorial .me-Title { font-family: var(--me-serif); font-style: italic; font-weight: 600; }
+            .me-Design--editorial .me-Title::after { content: ""; display: block; width: 3rem; height: 2px; margin: 1rem auto 0; background: var(--me-accent); }
+            .me-Design--editorial .me-Btn { text-transform: uppercase; letter-spacing: .14em; font-size: .75rem; }
+            .me-Design--editorial .me-Btn--primary { background: var(--me-accent); box-shadow: none; }
+
+            /* Soft UI: an embossed code on a raised card */
+            .me-Design--soft .me-Code { color: var(--me-bg) !important; text-shadow: 6px 6px 12px var(--me-soft-dark), -6px -6px 12px var(--me-soft-light); }
+            .me-Design--soft .me-Btn { border: 0; box-shadow: 6px 6px 14px var(--me-soft-dark), -6px -6px 14px var(--me-soft-light); background: var(--me-bg); }
+            .me-Design--soft .me-Btn--primary { background: linear-gradient(135deg, var(--me-accent), var(--me-accent-2)); }
+
+            /* Bold: ink outlines, hard shadows, a sticker code */
+            .me-Design--bold .me-Stage { border: 3px solid var(--me-ink); }
+            .me-Design--bold .me-Code { padding: .5rem 1.25rem; border: 3px solid var(--me-ink); border-radius: 12px; background: var(--me-accent-2); color: var(--me-ink) !important;
+                                        font-size: clamp(2.5rem, 2rem + 3vw, 4rem); font-weight: 900; letter-spacing: -.02em; transform: rotate(-4deg); box-shadow: 5px 5px 0 var(--me-ink); }
+            .me-Design--bold .me-Btn { border: 2px solid var(--me-ink); box-shadow: 4px 4px 0 var(--me-ink); font-weight: 800; }
+            .me-Design--bold .me-Btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--me-ink); }
+            .me-Design--bold .me-Btn--primary { background: var(--me-accent); }
+            .me-Design--bold .me-Title { font-weight: 900; }
+
+            /* Space: stars, a planet, a floating illustration */
+            .me-Page.me-Design--space .me-Code { background-image: linear-gradient(180deg, #ffffff, var(--me-accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent !important; }
+            .me-Design--space .me-Stage:has(.me-Code) .me-Artbox { display: block; }
+            .me-Design--space .me-Art { width: min(9rem, 45%); --me-art-fill: linear-gradient(135deg, #ffffff, var(--me-accent-2)); }
+
+            ```
+    }
+    subtemplate {
+        successMessage:
+            ```html
+            <div class="t-Body-alert">
+              <div class="t-Alert t-Alert--defaultIcons t-Alert--success t-Alert--horizontal t-Alert--page t-Alert--colorBG" id="t_Alert_Success" role="region" aria-labelledby="page_success_id">
+                <div class="t-Alert-wrap">
+                  <div class="t-Alert-icon">
+                    <span class="t-Icon" role="img" aria-label="&"APP_TEXT$APEX.SUCCESS"!ATTR."></span>
+                  </div>
+                  <div class="t-Alert-content">
+                    <div class="t-Alert-header">
+                      <h2 id="page_success_id" class="u-vh">#SUCCESS_MESSAGE_HEADING#</h2>
+                    </div>
+                    <div class="t-Alert-title" role="alert">#SUCCESS_MESSAGE#</div>
+                  </div>
+                  <div class="t-Alert-buttons">
+                    <button class="t-Button t-Button--noUI t-Button--icon t-Button--closeAlert" type="button" aria-label="#CLOSE_NOTIFICATION#" title="#CLOSE_NOTIFICATION#"><span class="t-Icon icon-close"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ```
+        notification:
+            ```html
+            <div class="t-Body-alert">
+              <div class="t-Alert t-Alert--defaultIcons t-Alert--warning t-Alert--horizontal t-Alert--page t-Alert--colorBG" id="t_Alert_Notification" role="region" aria-labelledby="page_warning_id">
+                <div class="t-Alert-wrap">
+                  <div class="t-Alert-icon">
+                    <span class="t-Icon" role="img" aria-label="&"APP_TEXT$WARNING"!ATTR."></span>
+                  </div>
+                  <div class="t-Alert-content">
+                    <div class="t-Alert-header">
+                      <h2 id="page_warning_id" class="u-vh">#ERROR_MESSAGE_HEADING#</h2>
+                    </div>
+                    <div class="t-Alert-body" role="alert">#MESSAGE#</div>
+                  </div>
+                  <div class="t-Alert-buttons">
+                    <button class="t-Button t-Button--noUI t-Button--icon t-Button--closeAlert" type="button" aria-label="#CLOSE_NOTIFICATION#" title="#CLOSE_NOTIFICATION#"><span class="t-Icon icon-close"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ```
+    }
+    layout {
+        maxColumns: 12
+        alwaysUseMaxColumns: true
+        defaultLabelColumnSpan: 2
+        firstColumnAttributes: col-start
+        lastColumnAttributes: col-end
+        containerTemplate:
+            ```html
+            <div class="container">
+            #ROWS#
+            </div>
+            ```
+        rowTemplate:
+            ```html
+            <div class="row #CSS_CLASSES#">
+            #COLUMNS#
+            </div>
+            ```
+        columnTemplate: <div class="col col-#COLUMN_SPAN_NUMBER# #CSS_CLASSES# #FIRST_LAST_COLUMN_ATTRIBUTES#" #ATTRIBUTES#>#CONTENT#</div>
+    }
+    errorPage {
+        template:
+            ```html
+            <div class="me-Error">
+              <p class="me-Code">Oops</p>
+              <h1 class="me-Title">#MESSAGE#</h1>
+              <p class="me-Text">#ADDITIONAL_INFO#</p>
+              <pre class="me-Tech">#TECHNICAL_INFO#</pre>
+              <div class="me-Actions"><button type="button" class="me-Btn me-Btn--primary me-Back">#OK#</button></div>
+              <a class="me-Home" href="&HOME_LINK.">#RETURN_TO_APPLICATION#</a>
+            </div>
+            ```
+    }
+    comments {
+        comments: Modern Error (Error Page Studio) - for APEX's own error page (set it as the theme's Error Page template; its Default Template Options choose the look) and for your own public error pages (404, access denied, session expired, maintenance, offline). Looks are template options - Design, Illustration, Accent Color, Color Scheme, Background. Slots - Content Body (your message; helper classes me-Code, me-Title, me-Text, me-Actions, me-Btn, me-Btn--primary, me-Back (go back), me-Reload (try again), me-Links), Top Bar (logo), Page Footer, Background Image. Optional text message MODERN_ERROR.COPY.
+    }
+
+    templateOption design-bignum (
+        name: Big Number
+        group: @page/me-design
+        sequence: 10
+        appearance {
+            cssClasses: me-Design--bignum
+        }
+    )
+
+    templateOption design-split (
+        name: Split Panel
+        group: @page/me-design
+        sequence: 20
+        appearance {
+            cssClasses: me-Design--split
+        }
+    )
+
+    templateOption design-neon (
+        name: Neon
+        group: @page/me-design
+        sequence: 30
+        appearance {
+            cssClasses: me-Design--neon
+        }
+    )
+
+    templateOption design-glitch (
+        name: Glitch
+        group: @page/me-design
+        sequence: 40
+        appearance {
+            cssClasses: me-Design--glitch
+        }
+    )
+
+    templateOption design-terminal (
+        name: Terminal
+        group: @page/me-design
+        sequence: 50
+        appearance {
+            cssClasses: me-Design--terminal
+        }
+    )
+
+    templateOption design-editorial (
+        name: Editorial
+        group: @page/me-design
+        sequence: 60
+        appearance {
+            cssClasses: me-Design--editorial
+        }
+    )
+
+    templateOption design-soft (
+        name: Soft UI
+        group: @page/me-design
+        sequence: 70
+        appearance {
+            cssClasses: me-Design--soft
+        }
+    )
+
+    templateOption design-bold (
+        name: Bold
+        group: @page/me-design
+        sequence: 80
+        appearance {
+            cssClasses: me-Design--bold
+        }
+    )
+
+    templateOption design-space (
+        name: Space
+        group: @page/me-design
+        sequence: 90
+        appearance {
+            cssClasses: me-Design--space
+        }
+    )
+
+    templateOption design-blueprint (
+        name: Blueprint
+        group: @page/me-design
+        sequence: 100
+        appearance {
+            cssClasses: me-Design--blueprint
+        }
+    )
+
+    templateOption design-wave (
+        name: Wave
+        group: @page/me-design
+        sequence: 110
+        appearance {
+            cssClasses: me-Design--wave
+        }
+    )
+
+    templateOption art-notfound (
+        name: Not Found
+        group: @page/me-art
+        sequence: 10
+        appearance {
+            cssClasses: me-Art--notfound
+        }
+    )
+
+    templateOption art-denied (
+        name: Access Denied
+        group: @page/me-art
+        sequence: 20
+        appearance {
+            cssClasses: me-Art--denied
+        }
+    )
+
+    templateOption art-expired (
+        name: Session Expired
+        group: @page/me-art
+        sequence: 30
+        appearance {
+            cssClasses: me-Art--expired
+        }
+    )
+
+    templateOption art-maintenance (
+        name: Maintenance
+        group: @page/me-art
+        sequence: 40
+        appearance {
+            cssClasses: me-Art--maintenance
+        }
+    )
+
+    templateOption art-server (
+        name: Server Error
+        group: @page/me-art
+        sequence: 50
+        appearance {
+            cssClasses: me-Art--server
+        }
+    )
+
+    templateOption art-offline (
+        name: Offline
+        group: @page/me-art
+        sequence: 60
+        appearance {
+            cssClasses: me-Art--offline
+        }
+    )
+
+    templateOption art-none (
+        name: Hide
+        group: @page/me-art
+        sequence: 70
+        appearance {
+            cssClasses: me-Art--none
+        }
+    )
+
+    templateOption accent-ocean (
+        name: Ocean
+        group: @page/me-accent
+        sequence: 10
+        appearance {
+            cssClasses: me-Accent--ocean
+        }
+    )
+
+    templateOption accent-indigo (
+        name: Indigo
+        group: @page/me-accent
+        sequence: 20
+        appearance {
+            cssClasses: me-Accent--indigo
+        }
+    )
+
+    templateOption accent-violet (
+        name: Violet
+        group: @page/me-accent
+        sequence: 30
+        appearance {
+            cssClasses: me-Accent--violet
+        }
+    )
+
+    templateOption accent-emerald (
+        name: Emerald
+        group: @page/me-accent
+        sequence: 40
+        appearance {
+            cssClasses: me-Accent--emerald
+        }
+    )
+
+    templateOption accent-rose (
+        name: Rose
+        group: @page/me-accent
+        sequence: 50
+        appearance {
+            cssClasses: me-Accent--rose
+        }
+    )
+
+    templateOption accent-amber (
+        name: Amber
+        group: @page/me-accent
+        sequence: 60
+        appearance {
+            cssClasses: me-Accent--amber
+        }
+    )
+
+    templateOption accent-slate (
+        name: Slate
+        group: @page/me-accent
+        sequence: 70
+        appearance {
+            cssClasses: me-Accent--slate
+        }
+    )
+
+    templateOption accent-wine (
+        name: Wine
+        group: @page/me-accent
+        sequence: 80
+        appearance {
+            cssClasses: me-Accent--wine
+        }
+    )
+
+    templateOption accent-tangerine (
+        name: Tangerine
+        group: @page/me-accent
+        sequence: 90
+        appearance {
+            cssClasses: me-Accent--tangerine
+        }
+    )
+
+    templateOption accent-cyan (
+        name: Cyan
+        group: @page/me-accent
+        sequence: 100
+        appearance {
+            cssClasses: me-Accent--cyan
+        }
+    )
+
+    templateOption scheme-dark (
+        name: Dark
+        group: @page/me-scheme
+        sequence: 10
+        appearance {
+            cssClasses: me-Scheme--dark
+        }
+    )
+
+    templateOption scheme-auto (
+        name: Follow Device Setting
+        group: @page/me-scheme
+        sequence: 20
+        appearance {
+            cssClasses: me-Scheme--auto
+        }
+    )
+
+    templateOption bg-mesh (
+        name: Mesh Gradient
+        group: @page/me-background
+        sequence: 10
+        appearance {
+            cssClasses: me-Bg--mesh
+        }
+    )
+
+    templateOption bg-gradient (
+        name: Bold Gradient
+        group: @page/me-background
+        sequence: 20
+        appearance {
+            cssClasses: me-Bg--gradient
+        }
+    )
+
+    templateOption bg-dots (
+        name: Dot Grid
+        group: @page/me-background
+        sequence: 30
+        appearance {
+            cssClasses: me-Bg--dots
+        }
+    )
+
+    templateOption bg-grid (
+        name: Grid Lines
+        group: @page/me-background
+        sequence: 40
+        appearance {
+            cssClasses: me-Bg--grid
+        }
+    )
+
+    templateOption bg-rings (
+        name: Rings
+        group: @page/me-background
+        sequence: 50
+        appearance {
+            cssClasses: me-Bg--rings
+        }
+    )
+
+    templateOption bg-image (
+        name: Image
+        group: @page/me-background
+        sequence: 60
+        appearance {
+            cssClasses: me-Bg--image
+        }
+    )
+
+    templateOption bg-solid (
+        name: Solid
+        group: @page/me-background
+        sequence: 70
+        appearance {
+            cssClasses: me-Bg--solid
+        }
+    )
+
+    templateOption width-wide (
+        name: Wide
+        group: @page/me-width
+        sequence: 10
+        appearance {
+            cssClasses: me-Width--wide
+        }
+        advanced {
+            isAdvancedOption: true
+        }
+    )
+
+    templateOption anim-entrance (
+        name: Entrance Animation
+        sequence: 100
+        appearance {
+            cssClasses: me-Anim--entrance
+        }
+    )
+
+    templateOption anim-art (
+        name: Animated Illustration
+        sequence: 110
+        appearance {
+            cssClasses: me-Anim--art
+        }
+        help {
+            helpText: The illustration floats; Neon flickers and Glitch jitters.
+        }
+    )
+
+    templateOption fx-copy (
+        name: Copy Error Details Button
+        sequence: 120
+        appearance {
+            cssClasses: me-Fx--copy
+        }
+        help {
+            helpText: On APEX's error page: a button that copies the message, details, page address and time - ready for a support ticket.
+        }
+    )
+
+    templateOption fx-online (
+        name: Reload When Back Online
+        sequence: 130
+        appearance {
+            cssClasses: me-Fx--online
+        }
+        help {
+            helpText: The page reloads by itself when the device gets its connection back (for an offline page).
+        }
+    )
+
+    slot backgroundImage (
+        name: Background Image
+        staticId: BACKGROUND_IMAGE
+        gridLayout {
+            gridSupport: false
+            newRow: false
+        }
+    )
+
+    slot contentBody (
+        name: Content Body
+        staticId: BODY
+        supports {
+            items: true
+            buttons: true
+        }
+        gridLayout {
+            maxFixedColumns: 12
+        }
+    )
+
+    slot pageFooter (
+        name: Page Footer
+        staticId: REGION_POSITION_04
+        gridLayout {
+            gridSupport: false
+        }
+    )
+
+    slot topBar (
+        name: Top Bar
+        staticId: REGION_POSITION_02
+        gridLayout {
+            gridSupport: false
+        }
+    )
+
+)

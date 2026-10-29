@@ -1,0 +1,45 @@
+page 10 (
+    name: Not Found
+    alias: NOT-FOUND
+    title: Not Found
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--bignum
+            me-Art--notfound
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">404</p>
+                <h1 class="me-Title">Page not found</h1>
+                <p class="me-Text">The page you are looking for doesn't exist or has moved. Check the address, or start again from the home page.</p>
+                <div class="me-Actions"><a class="me-Btn me-Btn--primary" href="f?p=&APP_ID.:1:&APP_SESSION.">Go to the home page</a><button type="button" class="me-Btn me-Back">Go back</button></div>
+                <ul class="me-Links"><li><a href="f?p=&APP_ID.:3:&APP_SESSION.">Help</a></li><li><a href="mailto:support@example.com">Contact support</a></li></ul>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

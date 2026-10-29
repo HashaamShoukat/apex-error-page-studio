@@ -1,0 +1,44 @@
+page 12 (
+    name: Session Expired
+    alias: SESSION-EXPIRED
+    title: Session Expired
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--editorial
+            me-Art--expired
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">401</p>
+                <h1 class="me-Title">Your session has expired</h1>
+                <p class="me-Text">For your security you were signed out after a while without activity. Sign in again to carry on where you left off.</p>
+                <div class="me-Actions"><a class="me-Btn me-Btn--primary" href="f?p=&APP_ID.:1:&APP_SESSION.">Sign in again</a></div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

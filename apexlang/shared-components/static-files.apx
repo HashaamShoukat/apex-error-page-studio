@@ -1,0 +1,103 @@
+file "gallery/apex-bignum.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/apex-classic.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/apex-editorial.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/apex-space.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/apex-split.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/apex-terminal.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/bignum-403.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/bignum-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/blueprint-503.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/bold-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/bold-500.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/classic-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/editorial-401.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/glitch-500.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/grid-401.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/mesh-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/neon-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/neon-503.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/soft-404.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/soft-offline.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/space-offline.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/split-403.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/split-503.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/terminal-500.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/wave-401.jpg" (
+    mimeType: image/jpeg
+)
+
+file "gallery/wave-404.jpg" (
+    mimeType: image/jpeg
+)

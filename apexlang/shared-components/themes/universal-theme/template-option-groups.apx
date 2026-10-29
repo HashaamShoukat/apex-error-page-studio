@@ -1,0 +1,65 @@
+templateOptionGroup me-design (
+    templateType: page
+    name: Design
+    sequence: 5
+    settings {
+        nullText: Classic
+    }
+    help {
+        helpText: The overall look. Each design brings its own shapes and colours; Accent Color, Color Scheme and Background still change it.
+    }
+)
+
+templateOptionGroup me-art (
+    templateType: page
+    name: Illustration
+    sequence: 10
+    settings {
+        nullText: None
+    }
+    help {
+        helpText: The line illustration above the message, drawn in the accent colours: a page and magnifier (Not Found), shield and lock (Access Denied), hourglass (Session Expired), cone and wrench (Maintenance), unplugged plug (Server Error), cloud (Offline). APEX's own error page shows the plug when none is chosen; Hide removes it there too.
+    }
+)
+
+templateOptionGroup me-accent (
+    templateType: page
+    name: Accent Color
+    sequence: 20
+    settings {
+        nullText: Design Default / Theme Color
+    }
+)
+
+templateOptionGroup me-scheme (
+    templateType: page
+    name: Color Scheme
+    sequence: 30
+    settings {
+        nullText: Light
+    }
+)
+
+templateOptionGroup me-background (
+    templateType: page
+    name: Background
+    sequence: 40
+    settings {
+        nullText: Glow
+    }
+    help {
+        helpText: Image uses the picture in the Background Image slot.
+    }
+)
+
+templateOptionGroup me-width (
+    templateType: page
+    name: Width
+    sequence: 50
+    settings {
+        nullText: Regular
+    }
+    advanced {
+        isAdvancedOption: true
+    }
+)

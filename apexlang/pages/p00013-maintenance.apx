@@ -1,0 +1,44 @@
+page 13 (
+    name: Maintenance
+    alias: MAINTENANCE
+    title: Maintenance
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--blueprint
+            me-Art--maintenance
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">503</p>
+                <h1 class="me-Title">We'll be back soon</h1>
+                <p class="me-Text">We're making some improvements. The application will be available again shortly - thank you for your patience.</p>
+                <div class="me-Actions"><button type="button" class="me-Btn me-Btn--primary me-Reload">Try again</button></div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

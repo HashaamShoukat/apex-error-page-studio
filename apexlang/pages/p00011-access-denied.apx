@@ -1,0 +1,44 @@
+page 11 (
+    name: Access Denied
+    alias: ACCESS-DENIED
+    title: Access Denied
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--split
+            me-Art--denied
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">403</p>
+                <h1 class="me-Title">Access denied</h1>
+                <p class="me-Text">You don't have permission to see this page. If you think you should, ask your administrator for access.</p>
+                <div class="me-Actions"><a class="me-Btn me-Btn--primary" href="f?p=&APP_ID.:1:&APP_SESSION.">Go to the home page</a><a class="me-Btn" href="mailto:support@example.com?subject=Access%20request">Request access</a></div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

@@ -1,0 +1,178 @@
+list navigation-bar (
+    name: Navigation Bar
+
+    entry github (
+        label: GitHub
+        icon {
+            imageIconCssClasses: fa-github
+        }
+        layout {
+            sequence: 10
+        }
+        link {
+            target: {
+                type: url
+                url: https://github.com/HashaamShoukat/apex-error-page-studio
+            }
+        }
+    )
+
+)
+
+list navigation-menu (
+    name: Navigation Menu
+
+    entry home (
+        label: Gallery
+        icon {
+            imageIconCssClasses: fa-th-large
+        }
+        layout {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 1
+            }
+        }
+    )
+
+    entry designer (
+        label: Designer
+        icon {
+            imageIconCssClasses: fa-paint-brush
+        }
+        layout {
+            sequence: 20
+        }
+        link {
+            target: {
+                page: 2
+            }
+        }
+    )
+
+    entry how-to-use (
+        label: How to Use
+        icon {
+            imageIconCssClasses: fa-book
+        }
+        layout {
+            sequence: 30
+        }
+        link {
+            target: {
+                page: 3
+            }
+        }
+    )
+
+    entry error-test (
+        label: Try a Real Error
+        icon {
+            imageIconCssClasses: fa-bug
+        }
+        layout {
+            sequence: 40
+        }
+        link {
+            target: {
+                page: 900
+            }
+        }
+    )
+
+    entry demo-pages (
+        label: Demo Pages
+        icon {
+            imageIconCssClasses: fa-files-o
+        }
+        layout {
+            sequence: 50
+        }
+        link {
+            target: {
+                page: 10
+            }
+        }
+    )
+
+    entry demo-not-found (
+        label: 404 Not Found
+        layout {
+            sequence: 10
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 10
+            }
+        }
+    )
+
+    entry demo-access-denied (
+        label: Access Denied
+        layout {
+            sequence: 20
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 11
+            }
+        }
+    )
+
+    entry demo-session-expired (
+        label: Session Expired
+        layout {
+            sequence: 30
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 12
+            }
+        }
+    )
+
+    entry demo-maintenance (
+        label: Maintenance
+        layout {
+            sequence: 40
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 13
+            }
+        }
+    )
+
+    entry demo-server-error (
+        label: Server Error
+        layout {
+            sequence: 50
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 14
+            }
+        }
+    )
+
+    entry demo-offline (
+        label: Offline
+        layout {
+            sequence: 60
+            parentEntry: @demo-pages
+        }
+        link {
+            target: {
+                page: 15
+            }
+        }
+    )
+
+)

@@ -1,0 +1,44 @@
+page 15 (
+    name: Offline
+    alias: OFFLINE
+    title: Offline
+    appearance {
+        pageTemplate: @modern-error
+        templateOptions: [
+            #DEFAULT#
+            me-Design--space
+            me-Art--offline
+        ]
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: unrestricted
+        formAutoComplete: false
+    }
+
+    region message (
+        name: Message
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <p class="me-Code">Offline</p>
+                <h1 class="me-Title">You're offline</h1>
+                <p class="me-Text">Check your internet connection. This page reloads by itself as soon as you're back online.</p>
+                <div class="me-Actions"><button type="button" class="me-Btn me-Btn--primary me-Reload">Try again</button></div>
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)
