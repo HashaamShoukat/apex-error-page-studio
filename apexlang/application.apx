@@ -30,6 +30,9 @@ app ERROR-PAGE-STUDIO (
         addBuiltWithApexToFooter: false
         autoDismissSuccessMessages: true
     }
+    javaScript {
+        fileUrls: #APP_FILES#nav-menu-fix.js
+    }
     appFormatMasks {
         date: DD-MON-YYYY
         timestamp: DS
